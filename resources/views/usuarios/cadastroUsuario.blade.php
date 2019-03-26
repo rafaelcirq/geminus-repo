@@ -13,17 +13,18 @@
         <div class="m-portlet__head-caption">
             <div class="m-portlet__head-title">
                 <h3 class="m-portlet__head-text">
-                    Cadastro de Usuários
+                {{isset($resource) ? 'Alteração de Usuário' : 'Cadastro de Usuário'}}
                 </h3>
             </div>
         </div>
     </div>
     <form class="m-form m-form--state m-form--fit m-form--label-align-right" id="m_form_2" 
-    method="POST" action="/cadastrarusuario">
+    method="POST" action="{{ isset($resource) ? '/alterarusuario' : '/cadastrarusuario' }}">
     {{ csrf_field() }}
 		<div class="m-portlet__body">
             @yield('mensagens')
 			<div class="m-form__content">
+            <input type="hidden" id="id" name="id" value="{{ old('', isset($resource) ? $resource->id : '') }}">
                 <div id="cpfholder" class="form-group m-form__group row">
                     <label class="col-form-label col-lg-3 col-sm-12">CPF *</label>
                     <div class="col-lg-4 col-md-9 col-sm-12">
@@ -44,8 +45,8 @@
                          @yield('email-erro')
                     </div>
                 </div>
-       
-                <div id="passwordholder" class="form-group m-form__group row">
+                <div id="passwordholder" class="form-group m-form__group row"
+                @if(isset($resource) ) style="display:none" @else   @endif>
                     <label class="col-form-label col-lg-3 col-sm-12">Senha *</label>
                     <div class="col-lg-4 col-md-9 col-sm-12">
                         <input type="password" class="form-control m-input" name="password" placeholder="Senha" 
@@ -61,7 +62,7 @@
                 <div class="row">
                     <div class="col-lg-9 ml-lg-auto">
                         <button type="submit" class="btn btn-accent">Salvar</button>
-                        <a href="/listarusuario">
+                        <a href="{{url('/listarusuario}')}">
                         <button type="reset" class="btn btn-secondary">Voltar</button></a>
                     </div>
                 </div>

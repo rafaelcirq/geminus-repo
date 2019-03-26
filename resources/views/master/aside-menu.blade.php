@@ -33,11 +33,15 @@
             </h4>
             <i class="m-menu__section-icon flaticon-more-v3"></i>
         </li>
-        <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-            <a href="/listarusuario" class="m-menu__link m-menu__toggle">
+        <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true">
+            <a href="/listarusuario" class="m-menu__link ">
                 <i class="m-menu__link-icon flaticon-list"></i>
-                <span class="m-menu__link-text">
-                    Listar
+                <span class="m-menu__link-title">
+                    <span class="m-menu__link-wrap">
+                        <span class="m-menu__link-text">
+                            Listar
+                        </span>
+                    </span>
                 </span>
             </a>
         </li>
