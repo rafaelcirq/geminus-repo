@@ -50,16 +50,22 @@ class UsuarioController extends Controller
 
     function listar(Request $request){
         
-       // $usuarios = DB::table('usuario')->paginate(10);
-        $usuarios = DB::table('usuario')->orderBy('cpf')->paginate(10);
+        $usuarios= User::all();
         return view('usuarios.listarUsuarios')->with("usuarios", $usuarios );
+        //return ["usuarios", $usuarios];
 
+    }
+
+    function list(){
+        $usuarios= User::all();
+        return $usuarios;
     }
 
     function excluir( $id){
         $user = User::find($id);
         $user->delete();
-        $usuarios = DB::table('usuario')->orderBy('cpf')->paginate(10);
+        //$usuarios = DB::table('usuario')->orderBy('cpf')->paginate(10);
+        $usuarios= User::all();
         return redirect('/listarusuario')->with('sucesso', 'Exclusão realizada com sucesso')
         ->with("usuarios",  $usuarios );
 

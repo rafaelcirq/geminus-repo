@@ -46,15 +46,19 @@
             </a>
         </li>
         <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-            <a href="/cadastrarusuario" class="m-menu__link m-menu__toggle">
+            <a href="/cadastrarusuario" class="m-menu__link">
                 <i class="m-menu__link-icon flaticon-add-circular-button"></i>
-                <span class="m-menu__link-text">
-                    Cadastrar
+                <span class="m-menu__link-title">
+                    <span class="m-menu__link-wrap">
+                        <span class="m-menu__link-text">
+                            Cadastrar
+                        </span>
+                    </span>
                 </span>
             </a>
         </li>
         <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-            <a href="/trocarsenha" class="m-menu__link m-menu__toggle">
+            <a href="/trocarsenha" class="m-menu__link">
                 <i class="m-menu__link-icon flaticon-lock"></i>
                 <span class="m-menu__link-text">
                     Trocar Senha

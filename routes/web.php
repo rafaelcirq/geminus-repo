@@ -56,6 +56,7 @@ Route::get('excluirusuario/{id}','UsuarioController@excluir');
 Route::post('/alterarusuario','UsuarioController@alterar');
 
 Route::get('/listarusuario','UsuarioController@listar');
+Route::post('/listarusuario','UsuarioController@list');
 
 
 Route::get('/trocarsenha','UsuarioController@trocarSenha');

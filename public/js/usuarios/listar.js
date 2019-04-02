@@ -8,11 +8,16 @@ var Index = function ()
     var index = function ()
     {
         var dataJSONArray = JSON.parse('[{"RecordID":1,"OrderID":"54473-251","ShipCountry":"GT","ShipCity":"San Pedro Ayampuc","ShipName":"Sanford-Halvorson","ShipAddress":"897 Magdeline Park","CompanyEmail":"sgormally0@dot.gov","CompanyAgent":"Shandra Gormally","CompanyName":"Eichmann, Upton and Homenick","Currency":"GTQ","Notes":"sit amet cursus id turpis integer aliquet massa id lobortis convallis","Department":"Computers","Website":"house.gov","Latitude":"14.78667","Longitude":"-90.45111","ShipDate":"5/21/2016","TimeZone":"America/Guatemala","Status":1,"Type":2}]   ');
-        
         $.ajax({
-            url: "UsuarioController.php@listar",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+            url: "/listarusuario",
+            method: 'POST',
+            async: false,
             success: function(data){
-                alert(data)
+                dataJSONArray=JSON.parse(JSON.stringify(data));
+                
              }
           });
 
@@ -47,14 +52,14 @@ var Index = function ()
 
             // columns definition
             columns: [{
-                field: "RecordID",
+                field: "id",
                 title: "#",
                 width: 50,
                 sortable: false,
                 textAlign: 'center',
                 selector: { class: 'm-checkbox--solid m-checkbox--brand' }
             }, {
-                field: "cpf",
+                field: "CPF",
                 title: "CPF"
             }, {
                 field: "email",
@@ -68,16 +73,26 @@ var Index = function ()
                 overflow: 'visible',
                 template: function (row, index, datatable)
                 {
+                    var id = row['id'];
                     var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
-
-                    return '\
-						<a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Editar">\
-                            <i class="la la-edit"></i>\
-                        </a>\
-                        <a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Excluir">\
-                            <i class="la la-trash"></i>\
-                        </a>\
-					';
+                    $("#remover").click(function (e) {
+                        id=$(this).data('id');
+                        $("#cpf").text($(this).data('cpf'));
+                        $("#email").text($(this).data('email'));
+                        $("#confirmar").prop('href','/excluirusuario/'+id);
+                    });
+                    var html = '\
+                    <a href="/cadastrarusuario/'+ id +'class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Editar">\
+                        <i class="la la-edit"></i>\
+                    </a>\
+                    <a href="/#" \class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Excluir"\
+                    id="remover" data-id='+id+' data-cpf='+row['CPF']+' data-email='+row['email']+'  \
+                    " data-toggle="modal" data-target="#modalConfirmDelete">\
+                        <i class="la la-trash"></i>\
+                    </a>\
+                ';
+                   
+                    return html;
                 }
             }]
         });
@@ -110,4 +125,5 @@ var Index = function ()
 jQuery(document).ready(function ()
 {
     Index.init();
+    
 });

@@ -18,7 +18,6 @@
             <div id="email-error" class="form-control-feedback">{{ $error }}</div>
         @endforeach
     <script type="text/javascript">
-    //$("#emailholder").attr("class","form-group m-form__group row has-danger" );
         document.getElementById('emailholder').setAttribute("class","form-group m-form__group row has-danger");
        
     </script>
@@ -60,7 +59,6 @@
             <div id="email-error" class="form-control-feedback">{{ $error }}</div>
         @endforeach
     <script type="text/javascript">
-    //$("#emailholder").attr("class","form-group m-form__group row has-danger" );
         document.getElementById('novasenhaholder').setAttribute("class","form-group m-form__group row has-danger");
        
     </script>
@@ -74,7 +72,6 @@
             <div id="password-error" class="form-control-feedback">{{ $error }}</div>
         @endforeach
     <script type="text/javascript">
-    //$("#emailholder").attr("class","form-group m-form__group row has-danger" );
         document.getElementById('confirmarsenhaholder').setAttribute("class","form-group m-form__group row has-danger");
        
     </script>
@@ -86,6 +83,15 @@
 @if ($message = Session::get('main'))
     <div class="m-alert m-alert--outline alert alert-danger "  style="font-weight: bold; width:50%;
     text-align:center;margin-left:160px">
+        <button type="button" class="close" data-dismiss="alert"></button>
+        <strong>{{ $message}}</strong>
+    </div>
+
+@endif
+@if ($message = Session::get('sucesso'))
+<div class="m-alert m-alert--outline alert alert-success" style="font-weight: bold; 
+                width:100%;
+                text-align:center; " role="alert">
         <button type="button" class="close" data-dismiss="alert"></button>
         <strong>{{ $message}}</strong>
     </div>
