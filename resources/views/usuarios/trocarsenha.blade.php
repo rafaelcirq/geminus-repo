@@ -57,8 +57,7 @@
                 <div class="row">
                     <div class="col-lg-9 ml-lg-auto">
                         <button type="submit" class="btn btn-accent">Salvar</button>
-                        <a href="/listarusuario">
-                        <button type="reset" class="btn btn-secondary">Voltar</button></a>
+                        <a class="btn btn-secondary" href=" {{ url('/listarusuario') }}">Voltar</a>
                     </div>
                 </div>
             </div>

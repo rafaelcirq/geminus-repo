@@ -135,6 +135,7 @@ var FormControls = function () {
             },
 
             submitHandler: function (form) {
+                $('input[name="CPF"]').unmask();
                 form[0].submit(); // submit the form
             }
         });       
@@ -231,4 +232,5 @@ var FormControls = function () {
 
 jQuery(document).ready(function() {    
     FormControls.init();
+    $('input[name="CPF"]').mask('000.000.000-00');
 });

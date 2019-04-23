@@ -37,16 +37,23 @@ var Index = function ()
                 // height: 450, // datatable's body's fixed height
                 footer: false // display/hide footer
             },
-
             // column sorting
             sortable: true,
 
             pagination: true,
-
+            
             search: {
                 input: $('#generalSearch')
             },
-
+            translate:{
+                toolbar:{
+                    pagination:{
+                        items:{
+                            info: 'Mostrando {{start}} - {{end}} de {{total}} registros',
+                        }
+                    }
+                }
+            },
             // inline and bactch editing(cooming soon)
             // editable: false,
 
@@ -75,23 +82,22 @@ var Index = function ()
                 {
                     var id = row['id'];
                     var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
-                    $("#remover").click(function (e) {
-                        id=$(this).data('id');
+                    $("a[id*='remover']").click(function (e) {
+                        //id=$(this).data('id');
                         $("#cpf").text($(this).data('cpf'));
                         $("#email").text($(this).data('email'));
                         $("#confirmar").prop('href','/excluirusuario/'+id);
                     });
                     var html = '\
-                    <a href="/cadastrarusuario/'+ id +'class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Editar">\
+                    <a href="/cadastrarusuario/'+ id +'"class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Editar">\
                         <i class="la la-edit"></i>\
                     </a>\
                     <a href="/#" \class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Excluir"\
-                    id="remover" data-id='+id+' data-cpf='+row['CPF']+' data-email='+row['email']+'  \
+                    id="remover'+id+'" data-id='+id+' data-cpf='+row['CPF']+' data-email='+row['email']+'  \
                     " data-toggle="modal" data-target="#modalConfirmDelete">\
                         <i class="la la-trash"></i>\
                     </a>\
                 ';
-                   
                     return html;
                 }
             }]
@@ -125,5 +131,9 @@ var Index = function ()
 jQuery(document).ready(function ()
 {
     Index.init();
+    $(".modal").on("hidden.bs.modal", function(){
+        $("#cpf").text('');
+        $("#email").text('');
+    });
     
 });

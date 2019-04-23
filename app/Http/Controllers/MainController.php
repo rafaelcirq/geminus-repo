@@ -21,7 +21,7 @@ class MainController extends Controller
     }
 
     function checkLogin (Request $request ){
-       
+        $request['cpf']= str_replace(['.','-'],'',$request['cpf']);
         $this->validate($request, [
             'cpf' => 'required|numeric|digits:11',
             'password' => 'required|alpha_num|min:2'

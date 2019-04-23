@@ -81,7 +81,7 @@
       <div class="modal-footer flex-center">
         <a href="#" id="confirmar" class="btn  btn-outline-danger" style="background-color: red;
         color: white;">Sim</a>
-        <a class="btn btn-primary" href="#" data-dismiss="modal" role="button">Não</a>
+        <a class="btn btn-primary" href="#" id='cancelar 'data-dismiss="modal" role="button">Não</a>
         
       </div>
     </div>

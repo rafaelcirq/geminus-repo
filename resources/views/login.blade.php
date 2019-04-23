@@ -1,6 +1,8 @@
 @extends('main')
 @include('util.mensagens')
 @section('content')
+<script src="{{asset('js/util/jquery.mask.js')}}"></script>
+    <script src="{{asset('js/util/jquery.mask.min.js')}}"></script>
 <div class="m-grid m-grid--hor m-grid--root m-page" style="margin-top:-10%;">
 			<div class="m-grid__item m-grid__item--fluid m-grid m-grid-hor m-login m-login--signin m-login--2 m-login-2--skin-2" id="m_login" style="background-image: url(media/bg-image.jpg);     background-size: 112%;
     background-position: center;">
@@ -40,5 +42,13 @@
 			</button>
 		</div>
 	</form>
+	<script type="text/javascript">
+	$(document).ready(function($) {    
+    	$('input[name="cpf"]').mask('000.000.000-00');
+	});
+	$('button[type="submit"]').click(function () {
+		$('input[name="cpf"]').unmask();
+	});
+	</script>
 </div>
 @endsection

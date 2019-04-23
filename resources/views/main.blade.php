@@ -36,11 +36,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/master/vendors.bundle.css') }}" rel="stylesheet"/>
 	<link href="{{ asset('css/master/style.bundle.css') }}" rel="stylesheet"/>
-	<link rel="stylesheet" href="{{ asset('css/style1.css ')}}">
-    <link rel="stylesheet" href="{{ asset('css/tabela.css ')}}">
-    <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/util.css')}}">
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/main.css')}}">
+	
 	
     
 

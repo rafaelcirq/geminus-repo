@@ -115,13 +115,13 @@ class UsuarioController extends Controller
     }
 
     function validation(Request $request){
-        
         $this->validate($request, [
-            'CPF' => 'required|numeric|digits:11',
+            'CPF' => 'required|numeric|digits:11|cpf',
             'password' => 'required|alpha_num|min:2',
             'email'=> 'required|email|unique:usuario'
             
         ], [
+            'CPF.cpf'=>'O CPF inserido não é válido',
             'CPF.required' => 'O campo CPF é obrigatório.',
             'password.min' => 'O campo senha precisa ter no mínimo 2 caracteres.',
             'CPF.numeric' => 'O campo CPF precisa ser numérico.',

@@ -32,7 +32,7 @@
                 Enviar
             </button>
             &nbsp;&nbsp;
-            <a id="m_login_forget_password_cancel" href="{!! route('entrar') !!}" class="btn btn-outline-focus m-btn m-btn--pill m-btn--custom m-login__btn">
+            <a id="m_login_forget_password_cancel" href="{!! route('login') !!}" class="btn btn-outline-focus m-btn m-btn--pill m-btn--custom m-login__btn">
                 Voltar
             </a>  
         </div>

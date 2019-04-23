@@ -4,6 +4,8 @@
    
     <script src="{{ asset('js/util/select.js') }}"></script>
      <script src="{{asset('js/util/form-controls.js')}}" type="text/javascript"></script> 
+     <script src="{{asset('js/util/jquery.mask.js')}}"></script>
+    <script src="{{asset('js/util/jquery.mask.min.js')}}"></script>
 @endsection
 
 @section('conteudo')
@@ -62,7 +64,6 @@
                     <div class="col-lg-9 ml-lg-auto">
                         <button type="submit" class="btn btn-accent">Salvar</button>
                         <a class="btn btn-secondary" href=" {{ url('/listarusuario') }}">Voltar
-                        <!-- <button class="btn btn-secondary">Voltar</button> -->
                         </a>
                     </div>
                 </div>
