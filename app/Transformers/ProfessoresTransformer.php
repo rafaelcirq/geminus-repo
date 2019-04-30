@@ -3,23 +3,23 @@
 namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
-use App\Entities\Cursos;
+use App\Entities\Professores;
 
 /**
- * Class CursosTransformer.
+ * Class ProfessoresTransformer.
  *
  * @package namespace App\Transformers;
  */
-class CursosTransformer extends TransformerAbstract
+class ProfessoresTransformer extends TransformerAbstract
 {
     /**
-     * Transform the Cursos entity.
+     * Transform the Professores entity.
      *
-     * @param \App\Entities\Cursos $model
+     * @param \App\Entities\Professores $model
      *
      * @return array
      */
-    public function transform(Cursos $model)
+    public function transform(Professores $model)
     {
         return [
             'id'         => (int) $model->id,
@@ -31,9 +31,8 @@ class CursosTransformer extends TransformerAbstract
         ];
     }
 
-    public function includeMatrizes(Cursos $model)
+    public function includeTurmas(Professores $model)
     {
-        return $this->collection($model->matrizes, new MatrizesTransformer());
+        return $this->collection($model->turmas, new TurmasTransformer());
     }
-
 }

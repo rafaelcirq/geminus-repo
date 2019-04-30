@@ -17,7 +17,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <head>
     <meta charset="utf-8" />
     <title>
-        Geminus
+        Metronic | Dashboard
     </title>
     <meta name="description" content="Latest updates and statistic charts">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -42,7 +42,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <link href="/css/master/vendors.bundle.css" rel="stylesheet" type="text/css" />
     <link href="/css/master/style.bundle.css" rel="stylesheet" type="text/css" />
     <!--end::Base Styles -->
-    <link rel="shortcut icon" href="{{asset('media/geminus.png')}}" />
+    <link rel="shortcut icon" href="assets/demo/default/media/img/logo/favicon.ico" />
 </head>
 <!-- end::Head -->
 <!-- end::Body -->
@@ -74,7 +74,7 @@ License: You must have a valid license purchased only from themeforest(the above
         </div>
         <!-- end:: Body -->
         <!-- begin::Footer -->
-    
+    @include('master.footer')
         <!-- end::Footer -->
     </div>
     <!-- end:: Page -->

@@ -22,6 +22,12 @@
     </div>
     <div class="m-portlet__body">
 
+            @foreach ($disciplinas as $m)
+            Disciplina: {{$m->nome}}<br>
+            MAtriz: {{$m->matriz->nome}}
+            <br>====================<br>
+        @endforeach
+
         <!--begin: Search Form -->
         <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
             <div class="row align-items-center">

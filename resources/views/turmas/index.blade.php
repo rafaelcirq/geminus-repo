@@ -22,6 +22,21 @@
     </div>
     <div class="m-portlet__body">
 
+        @foreach ($turmas as $item)
+            Turma {{$item->nome}}
+            , {{$item->disciplina->nome}}
+            , professor {{$item->professor->nome}}
+            , semestre {{$item->semestre->semestre}}
+            , inicia
+            @foreach ($item->horarios as $h)
+                {{$h->horaInicio}}
+            @endforeach
+            <br>===============<br>
+
+            TESTAR RELAÇÃO TURMAS E HORARIO
+        
+            @endforeach
+
         <!--begin: Search Form -->
         <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
             <div class="row align-items-center">

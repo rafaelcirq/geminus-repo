@@ -7,11 +7,11 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
- * Class Cursos.
+ * Class Horarios.
  *
  * @package namespace App\Entities;
  */
-class Cursos extends Model implements Transformable
+class Horarios extends Model implements Transformable
 {
     use TransformableTrait;
 
@@ -20,11 +20,10 @@ class Cursos extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['nome'];
+    protected $fillable = ['turmas_id', 'dia', 'hora_inicio', 'hora_fim'];
 
-    public function matrizes()
-    {
-        return $this->hasMany(Matrizes::class);
+    public function turma() {
+        return $this->belongsTo(Turmas::class, 'turmas_id');
     }
 
 }
