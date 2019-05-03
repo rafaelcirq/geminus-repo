@@ -74,7 +74,7 @@ License: You must have a valid license purchased only from themeforest(the above
         </div>
         <!-- end:: Body -->
         <!-- begin::Footer -->
-    @include('master.footer')
+    
         <!-- end::Footer -->
     </div>
     <!-- end:: Page -->
