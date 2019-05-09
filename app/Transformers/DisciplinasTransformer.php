@@ -12,6 +12,8 @@ use App\Entities\Disciplinas;
  */
 class DisciplinasTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = ['matriz'];
+
     /**
      * Transform the Disciplinas entity.
      *

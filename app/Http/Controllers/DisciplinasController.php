@@ -8,8 +8,11 @@ use App\Http\Requests;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\DisciplinasCreateRequest;
+use App\Presenters\DisciplinasPresenter;
 use App\Http\Requests\DisciplinasUpdateRequest;
+use App\Repositories\CursosRepository;
 use App\Repositories\DisciplinasRepository;
+use App\Repositories\MatrizesRepository;
 use App\Validators\DisciplinasValidator;
 
 /**
@@ -20,9 +23,19 @@ use App\Validators\DisciplinasValidator;
 class DisciplinasController extends Controller
 {
     /**
+     * @var CursosRepository
+     */
+    protected $cursosRepository;
+
+    /**
      * @var DisciplinasRepository
      */
     protected $repository;
+
+    /**
+     * @var MatrizesRepository
+     */
+    protected $matrizesRepository;
 
     /**
      * @var DisciplinasValidator
@@ -35,8 +48,10 @@ class DisciplinasController extends Controller
      * @param DisciplinasRepository $repository
      * @param DisciplinasValidator $validator
      */
-    public function __construct(DisciplinasRepository $repository, DisciplinasValidator $validator)
+    public function __construct(CursosRepository $cursosRepository, DisciplinasRepository $repository, MatrizesRepository $matrizesRepository, DisciplinasValidator $validator)
     {
+        $this->cursosRepository = $cursosRepository;
+        $this->matrizesRepository = $matrizesRepository;
         $this->repository = $repository;
         $this->validator  = $validator;
     }
@@ -49,19 +64,17 @@ class DisciplinasController extends Controller
     public function index()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $disciplinas = $this->repository->all();
-        // foreach($disciplinas as $d) {
-        //     dd($d->matriz());
-        // }
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $disciplinas,
-            ]);
+        
+        if (request()->wantsJson())  {
+            $this->repository->setPresenter(DisciplinasPresenter::class);
+            $disciplinas = $this->repository->all();
+            return $disciplinas;
         }
+        $disciplinas = $this->repository->all();
+        $cursos = $this->cursosRepository->all();
+        $matrizes = $this->matrizesRepository->all();
 
-        return view('disciplinas.index', compact('disciplinas'));
+        return view('disciplinas.index', compact('disciplinas', 'cursos', 'matrizes'));
     }
 
     /**
@@ -115,6 +128,8 @@ class DisciplinasController extends Controller
     {
         $disciplina = $this->repository->find($id);
 
+        dd($disciplina);
+
         if (request()->wantsJson()) {
 
             return response()->json([
@@ -134,6 +149,7 @@ class DisciplinasController extends Controller
      */
     public function edit($id)
     {
+        dd('edit' + $id);
         $disciplina = $this->repository->find($id);
 
         return view('disciplinas.edit', compact('disciplina'));
@@ -192,6 +208,7 @@ class DisciplinasController extends Controller
      */
     public function destroy($id)
     {
+        dd('destroy' + $id);
         $deleted = $this->repository->delete($id);
 
         if (request()->wantsJson()) {

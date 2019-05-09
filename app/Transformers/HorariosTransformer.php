@@ -12,6 +12,7 @@ use App\Entities\Horarios;
  */
 class HorariosTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = ['turma'];
     /**
      * Transform the Horarios entity.
      *

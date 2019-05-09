@@ -12,6 +12,7 @@ use App\Entities\Matrizes;
  */
 class MatrizesTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = ['curso'];
     /**
      * Transform the Matrizes entity.
      *

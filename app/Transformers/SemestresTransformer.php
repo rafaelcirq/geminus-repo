@@ -12,6 +12,8 @@ use App\Entities\Semestres;
  */
 class SemestresTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = [];
+
     /**
      * Transform the Semestres entity.
      *

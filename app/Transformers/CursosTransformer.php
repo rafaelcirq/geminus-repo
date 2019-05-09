@@ -12,6 +12,8 @@ use App\Entities\Cursos;
  */
 class CursosTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = [];
+
     /**
      * Transform the Cursos entity.
      *

@@ -1,12 +1,10 @@
 //== Class definition
 
-var Index = function ()
-{
+var Index = function () {
     //== Private functions
 
     // index initializer
-    var index = function ()
-    {
+    var index = function () {
 
         var dataJSONArray = JSON.parse('[{"RecordID":1,"OrderID":"54473-251","ShipCountry":"GT","ShipCity":"San Pedro Ayampuc","ShipName":"Sanford-Halvorson","ShipAddress":"897 Magdeline Park","CompanyEmail":"sgormally0@dot.gov","CompanyAgent":"Shandra Gormally","CompanyName":"Eichmann, Upton and Homenick","Currency":"GTQ","Notes":"sit amet cursus id turpis integer aliquet massa id lobortis convallis","Department":"Computers","Website":"house.gov","Latitude":"14.78667","Longitude":"-90.45111","ShipDate":"5/21/2016","TimeZone":"America/Guatemala","Status":1,"Type":2}]   ');
 
@@ -18,6 +16,27 @@ var Index = function ()
                 type: 'local',
                 source: dataJSONArray,
                 pageSize: 10
+            },
+
+            data: {
+                type: 'remote',
+                source: {
+                    read: {
+                        method: 'GET',
+                        url: 'cursos',
+                        map: function (raw) {
+                            var dataSet = raw;
+                            if (typeof raw.data !== 'undefined') {
+                                dataSet = raw.data;
+                            }
+                            return dataSet;
+                        },
+                    },
+                },
+                pageSize: 30,
+                serverPaging: false,
+                serverFiltering: false,
+                serverSorting: false,
             },
 
             // layout definition
@@ -59,15 +78,14 @@ var Index = function ()
             }, {
                 field: "updated_at",
                 title: "Dt. Última Atualização",
-                width: 100
+                // width: 100
             }, {
                 field: "Actions",
                 width: 110,
                 title: "Ações",
                 sortable: false,
                 overflow: 'visible',
-                template: function (row, index, datatable)
-                {
+                template: function (row, index, datatable) {
                     var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
                     return '\
@@ -84,29 +102,26 @@ var Index = function ()
 
         var query = datatable.getDataSourceQuery();
 
-        $('#m_form_status').on('change', function ()
-        {
+        $('#m_form_status').on('change', function () {
             datatable.search($(this).val(), 'Status');
         }).val(typeof query.Status !== 'undefined' ? query.Status : '');
 
-        $('#m_form_type').on('change', function ()
-        {
+        $('#m_form_type').on('change', function () {
             datatable.search($(this).val(), 'Type');
         }).val(typeof query.Type !== 'undefined' ? query.Type : '');
 
+        console.log(data);
     };
 
     return {
         //== Public functions
-        init: function ()
-        {
+        init: function () {
             // init dmeo
             index();
         }
     };
 }();
 
-jQuery(document).ready(function ()
-{
+jQuery(document).ready(function () {
     Index.init();
 });
