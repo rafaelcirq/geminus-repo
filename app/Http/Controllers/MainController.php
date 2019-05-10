@@ -17,7 +17,7 @@ class MainController extends Controller
     }
     
     public function sucesso() {
-        return view('geminus');
+        return redirect('listarusuario');
     }
 
     function checkLogin (Request $request ){
