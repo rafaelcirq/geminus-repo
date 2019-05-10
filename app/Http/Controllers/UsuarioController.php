@@ -20,7 +20,7 @@ class UsuarioController extends Controller
     }
 
     public function trocarSenha(){
-        return view('usuarios.trocarSenha');
+        return view('usuarios.trocarsenha');
     }
 
 
