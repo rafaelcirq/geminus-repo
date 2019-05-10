@@ -8,7 +8,7 @@ var Select = function ()
 
 		$('.m-bootstrap-select').selectpicker();
 
-		$('#m_select2_3, #m_select2_3_validate').select2({
+		$('.m-select2').select2({
 			
 		});
 

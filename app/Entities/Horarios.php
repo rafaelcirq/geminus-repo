@@ -22,8 +22,8 @@ class Horarios extends Model implements Transformable
      */
     protected $fillable = ['turmas_id', 'dia', 'hora_inicio', 'hora_fim'];
 
-    public function turma() {
-        return $this->belongsTo(Turmas::class, 'turmas_id');
+    public function turmas() {
+        return $this->hasMany(Turmas::class, 'turmas_id');
     }
 
 }

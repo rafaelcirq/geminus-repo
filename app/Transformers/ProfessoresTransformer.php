@@ -12,7 +12,7 @@ use App\Entities\Professores;
  */
 class ProfessoresTransformer extends TransformerAbstract
 {
-    protected $defaultIncludes = ['turmas'];
+    protected $defaultIncludes = [];
 
     /**
      * Transform the Professores entity.

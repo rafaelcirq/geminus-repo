@@ -37,12 +37,12 @@
                                         </label>
                                     </div>
                                     <div class="m-form__control">
-                                        <select class="form-control m-bootstrap-select" id="m_form_status">
+                                        <select class="form-control m-bootstrap-select" id="m_form_curso">
                                         <option value="">
                                             Todos
                                         </option>
                                         @foreach ($cursos as $curso)
-                                            <option value="{{ $curso->id }}">
+                                            <option value="{{ $curso->nome }}">
                                                 {{ $curso->nome }}
                                             </option>
                                         @endforeach
@@ -89,7 +89,7 @@
                     </div>
                 </div>
                 <div class="col-xl-1 order-1 order-xl-2 m--align-right">
-                    <a href="#" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+                    <a href="{{ route('disciplinas.create') }}" href="#" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
                         <span>
                             <i class="flaticon-plus"></i>
                             <span>
@@ -105,6 +105,14 @@
         <!--begin: Datatable -->
         <div class="m_datatable" id="local_data"></div>
         <!--end: Datatable -->
+
+        <div id="rel_delete_forms">
+            @foreach($disciplinas as $disciplina)
+                {{ Form::open(['method' => 'DELETE', 'id' => "delete_form_".$disciplina->id, 'route' => ['disciplinas.destroy', $disciplina->id]]) }}
+                    {{-- <button>delete</button> --}}
+                {{ Form::close() }}
+            @endforeach
+        </div>
 
     </div>
 </div>

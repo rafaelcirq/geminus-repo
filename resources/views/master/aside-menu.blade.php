@@ -20,10 +20,26 @@
             <i class="m-menu__section-icon flaticon-more-v3"></i>
         </li>
         <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-            <a href="/teste" class="m-menu__link m-menu__toggle">
+            <a href="/cursos" class="m-menu__link m-menu__toggle">
                 <i class="m-menu__link-icon flaticon-folder-3"></i>
                 <span class="m-menu__link-text">
                     Cursos
+                </span>
+            </a>
+        </li>
+        <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+            <a href="/disciplinas" class="m-menu__link m-menu__toggle">
+                <i class="m-menu__link-icon flaticon-edit-1"></i>
+                <span class="m-menu__link-text">
+                    Disciplinas
+                </span>
+            </a>
+        </li>
+        <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+            <a href="/turmas" class="m-menu__link m-menu__toggle">
+                <i class="m-menu__link-icon flaticon-list-2"></i>
+                <span class="m-menu__link-text">
+                    Turmas
                 </span>
             </a>
         </li>

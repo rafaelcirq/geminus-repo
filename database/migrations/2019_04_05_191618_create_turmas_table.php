@@ -37,7 +37,7 @@ class CreateTurmasTable extends Migration
             ->references('id')
             ->on('semestres')
             ->onUpdate('cascade')
-            ->onDelete('cascade');
+			->onDelete('cascade');
 
 			$table->string('nome', 1);
 

@@ -34,8 +34,8 @@ class HorariosTransformer extends TransformerAbstract
         ];
     }
 
-    public function includeTurma(Horarios $model)
+    public function includeTurmas(Horarios $model)
     {
-        return $this->item($model->turma, new TurmasTransformer());
+        return $this->collection($model->turma, new TurmasTransformer());
     }
 }

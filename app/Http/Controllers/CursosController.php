@@ -101,6 +101,11 @@ class CursosController extends Controller
         }
     }
 
+    public function create()
+    {
+        return view('cursos.create');
+    }
+
     /**
      * Display the specified resource.
      *

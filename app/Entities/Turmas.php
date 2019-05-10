@@ -20,7 +20,7 @@ class Turmas extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['nome'];
+    protected $fillable = ['disciplinas_id', 'professores_id', 'semestres_id', 'nome'];
 
     public function disciplina() {
         return $this->belongsTo(Disciplinas::class, 'disciplinas_id');
@@ -35,7 +35,7 @@ class Turmas extends Model implements Transformable
     }
 
     public function horarios() {
-        return $this->hasMany(Horarios::class);
+        return $this->belongsToMany(Horarios::class);
     }
 
 }

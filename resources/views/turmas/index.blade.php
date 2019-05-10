@@ -22,21 +22,6 @@
     </div>
     <div class="m-portlet__body">
 
-        @foreach ($turmas as $item)
-            Turma {{$item->nome}}
-            , {{$item->disciplina->nome}}
-            , professor {{$item->professor->nome}}
-            , semestre {{$item->semestre->semestre}}
-            , inicia
-            @foreach ($item->horarios as $h)
-                {{$h->horaInicio}}
-            @endforeach
-            <br>===============<br>
-
-            TESTAR RELAÇÃO TURMAS E HORARIO
-        
-            @endforeach
-
         <!--begin: Search Form -->
         <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
             <div class="row align-items-center">
@@ -56,6 +41,11 @@
                                             <option value="">
                                                 Todos
                                             </option>
+                                            @foreach ($cursos as $curso)
+                                            <option value="">
+                                                    {{ $curso->nome }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -73,6 +63,11 @@
                                             <option value="">
                                                 Todos
                                             </option>
+                                            @foreach ($professores as $professor)
+                                            <option value="">
+                                                    {{ $professor->nome }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -93,7 +88,7 @@
                     </div>
                 </div>
                 <div class="col-xl-4 order-1 order-xl-2 m--align-right">
-                    <a href="#" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+                    <a href="{{ route('turmas.create') }}" href="#" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
                         <span>
                             <i class="flaticon-plus"></i>
                             <span>
@@ -109,6 +104,18 @@
         <!--begin: Datatable -->
         <div class="m_datatable" id="local_data"></div>
         <!--end: Datatable -->
+
+        {{-- begin: Modal Horarios --}}
+        <div class="modal fade" id="turmas_mostrar_horarios" tabindex="-1" role="dialog"></div>
+        {{-- end: Modal Horarios --}}
+
+        <div id="rel_delete_forms">
+            @foreach($turmas as $turma)
+                {{ Form::open(['method' => 'DELETE', 'id' => "delete_form_".$turma->id, 'route' => ['turmas.destroy', $turma->id]]) }}
+                    {{-- <button>delete</button> --}}
+                {{ Form::close() }}
+            @endforeach
+        </div>
 
     </div>
 </div>

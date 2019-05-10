@@ -12,7 +12,9 @@ use App\Entities\Turmas;
  */
 class TurmasTransformer extends TransformerAbstract
 {
-    protected $defaultIncludes = ['disciplina', 'professor', 'semestre', 'horarios'];
+    // protected $defaultIncludes = ['disciplina', 'professor', 'semestre', 'horarios'];
+    protected $defaultIncludes = ['disciplina', 'professor', 'semestre'];
+
     /**
      * Transform the Turmas entity.
      *

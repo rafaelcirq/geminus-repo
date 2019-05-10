@@ -9,6 +9,12 @@ use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\TurmasCreateRequest;
 use App\Http\Requests\TurmasUpdateRequest;
+use App\Presenters\TurmasPresenter;
+use App\Repositories\CursosRepository;
+use App\Repositories\DisciplinasRepository;
+use App\Repositories\HorariosRepository;
+use App\Repositories\ProfessoresRepository;
+use App\Repositories\SemestresRepository;
 use App\Repositories\TurmasRepository;
 use App\Validators\TurmasValidator;
 
@@ -20,9 +26,34 @@ use App\Validators\TurmasValidator;
 class TurmasController extends Controller
 {
     /**
+     * @var CursosRepository
+     */
+    protected $cursosRepository;
+
+    /**
      * @var TurmasRepository
      */
     protected $repository;
+
+    /**
+     * @var DisciplinasRepository
+     */
+    protected $disciplinasRepository;
+
+    /**
+     * @var SemestresRepository
+     */
+    protected $semestresRepository;
+
+    /**
+     * @var ProfessoresRepository
+     */
+    protected $professoresRepository;
+
+    /**
+     * @var HorariosRepository
+     */
+    protected $horariosRepository;
 
     /**
      * @var TurmasValidator
@@ -35,8 +66,13 @@ class TurmasController extends Controller
      * @param TurmasRepository $repository
      * @param TurmasValidator $validator
      */
-    public function __construct(TurmasRepository $repository, TurmasValidator $validator)
+    public function __construct(CursosRepository $cursosRepository, HorariosRepository $horariosRepository, SemestresRepository $semestresRepository, DisciplinasRepository $disciplinasRepository, TurmasRepository $repository, ProfessoresRepository $professoresRepository, TurmasValidator $validator)
     {
+        $this->horariosRepository = $horariosRepository;
+        $this->disciplinasRepository = $disciplinasRepository;
+        $this->professoresRepository = $professoresRepository;
+        $this->semestresRepository = $semestresRepository;
+        $this->cursosRepository = $cursosRepository;
         $this->repository = $repository;
         $this->validator  = $validator;
     }
@@ -49,16 +85,28 @@ class TurmasController extends Controller
     public function index()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $turmas = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $turmas,
-            ]);
+        
+        if (request()->wantsJson())  {
+            $this->repository->setPresenter(TurmasPresenter::class);
+            $turmas = $this->repository->all();
+            
+            return $turmas;
         }
+        $turmas = $this->repository->all();
+        $professores = $this->professoresRepository->all();
+        $cursos = $this->cursosRepository->all();
 
-        return view('turmas.index', compact('turmas'));
+        return view('turmas.index', compact('turmas', 'professores', 'cursos'));
+    }
+
+    public function create()
+    {
+        $professores = $this->professoresRepository->all();
+        $semestres = $this->semestresRepository->all();
+        $disciplinas = $this->disciplinasRepository->all();
+        $horarios = $this->horariosRepository->all();
+
+        return view('turmas.create', compact('professores', 'disciplinas', 'semestres', 'horarios'));
     }
 
     /**
@@ -72,32 +120,57 @@ class TurmasController extends Controller
      */
     public function store(TurmasCreateRequest $request)
     {
-        try {
+        try 
+        {   
+            $data =  $request->all();
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
 
-            $turma = $this->repository->create($request->all());
+            $turma = $this->repository->create($data);
+
+            if(isset($data['horarios'])) {
+                foreach ((array) $data['horarios'] as $horario) {
+                    $turma->horarios()->attach($horario);
+                }
+            }
 
             $response = [
-                'message' => 'Turmas created.',
+                'success' => true,
+                'message' => 'Turma criada.',
                 'data'    => $turma->toArray(),
             ];
 
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
 
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
+            session()->flash('response', $response);
+
+            return redirect()->back();
+        } 
+        catch (\Exception $e) 
+        {
+            // If errors...
+            switch (get_class($e)) {
+
+                case ValidatorException::class:
+                $message = $e->getMessageBag();
+                break;
+                default:
+                $message = $e->getMessage();
+                break;
             }
 
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+
+            if ($request->wantsJson()) {
+                return response()->json($response);
+            }
+
+            return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
 
@@ -132,8 +205,12 @@ class TurmasController extends Controller
     public function edit($id)
     {
         $turma = $this->repository->find($id);
+        $professores = $this->professoresRepository->all();
+        $semestres = $this->semestresRepository->all();
+        $disciplinas = $this->disciplinasRepository->all();
+        $horarios = $this->horariosRepository->all();
 
-        return view('turmas.edit', compact('turma'));
+        return view('turmas.edit', compact('turma', 'professores', 'disciplinas', 'semestres', 'horarios'));
     }
 
     /**
@@ -148,34 +225,59 @@ class TurmasController extends Controller
      */
     public function update(TurmasUpdateRequest $request, $id)
     {
-        try {
+        try 
+        {
+            $data = $request->all();
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            $turma = $this->repository->update($request->all(), $id);
+            $turma = $this->repository->update($data, $id);
+
+            $turma->Horarios()->detach();
+
+            if(isset($data['horarios'])) {
+                foreach ((array) $data['horarios'] as $horario) {
+                    $turma->horarios()->attach($horario);
+                }
+            }
 
             $response = [
-                'message' => 'Turmas updated.',
+                'success' => true,
+                'message' => 'Turma alterada.',
                 'data'    => $turma->toArray(),
             ];
 
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
 
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
+            session()->flash('response', $response);
+            
+            return redirect()->back();
+        } 
+        catch (\Exception $e) 
+        {
+            // If errors...
+            switch (get_class($e)) {
 
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
+                case ValidatorException::class:
+                $message = $e->getMessageBag();
+                break;
+                default:
+                $message = $e->getMessage();
+                break;
             }
 
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+
+            if ($request->wantsJson()) {
+                return response()->json($response);
+            }
+
+            return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
 
@@ -189,16 +291,53 @@ class TurmasController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
+        try 
+        {
+            $deleted = $this->repository->delete($id);
 
-        if (request()->wantsJson()) {
+            $response = [
+                'success' => true,
+                'message' => 'Turma deletada.',
+                'data'    => $deleted,
+            ];
 
-            return response()->json([
-                'message' => 'Turmas deleted.',
-                'deleted' => $deleted,
-            ]);
+            if (request()->wantsJson()) {
+                return response()->json($response);
+            }
+
+            session()->flash('response', $response);
+
+            return redirect()->back();
         }
+        catch (\Exception $e) 
+        {
+            // dd($e);            
+            $message = $e->getMessage();
 
-        return redirect()->back()->with('message', 'Turmas deleted.');
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+
+            if (request()->wantsJson()) {
+                return response()->json($response);
+            }
+
+            return redirect()->back()->withErrors($response['message'])->withInput();
+        }
+    }
+
+    public function getHorarios($id) {
+        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        $turma = $this->repository->find($id);
+
+        if (request()->wantsJson())  {
+            $this->repository->setPresenter(TurmasPresenter::class);
+            return $turma->horarios;
+        }
+        $horarios = $turma->horarios;
+
+        return view('turmas.horarios', compact('horarios', 'turma'));
+
     }
 }

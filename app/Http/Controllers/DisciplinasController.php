@@ -13,7 +13,9 @@ use App\Http\Requests\DisciplinasUpdateRequest;
 use App\Repositories\CursosRepository;
 use App\Repositories\DisciplinasRepository;
 use App\Repositories\MatrizesRepository;
+use App\Repositories\TurmasRepository;
 use App\Validators\DisciplinasValidator;
+use App\Entities\Disciplinas;
 
 /**
  * Class DisciplinasController.
@@ -22,6 +24,11 @@ use App\Validators\DisciplinasValidator;
  */
 class DisciplinasController extends Controller
 {
+    /**
+     * @var TurmasRepository
+     */
+    protected $turmasRepository;
+
     /**
      * @var CursosRepository
      */
@@ -48,9 +55,10 @@ class DisciplinasController extends Controller
      * @param DisciplinasRepository $repository
      * @param DisciplinasValidator $validator
      */
-    public function __construct(CursosRepository $cursosRepository, DisciplinasRepository $repository, MatrizesRepository $matrizesRepository, DisciplinasValidator $validator)
+    public function __construct(TurmasRepository $turmasRepository, CursosRepository $cursosRepository, DisciplinasRepository $repository, MatrizesRepository $matrizesRepository, DisciplinasValidator $validator)
     {
         $this->cursosRepository = $cursosRepository;
+        $this->turmasRepository = $turmasRepository;
         $this->matrizesRepository = $matrizesRepository;
         $this->repository = $repository;
         $this->validator  = $validator;
@@ -77,6 +85,27 @@ class DisciplinasController extends Controller
         return view('disciplinas.index', compact('disciplinas', 'cursos', 'matrizes'));
     }
 
+    public function create()
+    {
+        $turmas = $this->turmasRepository->all();
+        $matrizes = $this->matrizesRepository->all();
+        $disciplinas = $this->repository->all();
+
+        return view('disciplinas.create', compact('matrizes', 'disciplinas', 'turmas'));
+    }
+
+    // public function createPreRequisitos(array $preRequisitosId = null)
+    // {
+    //     $pre = [];
+    //     $d = new Disciplinas();
+    //     $d = $this->repository->find($preRequisitosId);
+    //     if(isset($d)) {
+    //         dd($d);
+    //     } else {
+    //         dd("erro");
+    //     }
+    // }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -88,32 +117,59 @@ class DisciplinasController extends Controller
      */
     public function store(DisciplinasCreateRequest $request)
     {
-        try {
+        try 
+        {
+            $data = $request->all();        
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
+            $disciplina = $this->repository->create($data);
 
-            $disciplina = $this->repository->create($request->all());
+            if(isset($data['pre_requisitos'])) {
+                $disciplina->preRequisitos()->attach($data['pre_requisitos']);
+            }
+            if(isset($data['equivalencias'])) {
+                $disciplina->equivalencias()->attach($data['equivalencias']);
+            }
+
+            // dd($disciplina);
 
             $response = [
-                'message' => 'Disciplinas created.',
+                'success' => true,
+                'message' => 'Disciplina criada.',
                 'data'    => $disciplina->toArray(),
             ];
 
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
 
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
+            session()->flash('response', $response);
+
+            return redirect()->back();
+        } 
+        catch (\Exception $e) 
+        {
+            // If errors...
+            switch (get_class($e)) {
+
+                case ValidatorException::class:
+                $message = $e->getMessageBag();
+                break;
+                default:
+                $message = $e->getMessage();
+                break;
             }
 
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+
+            if ($request->wantsJson()) {
+                return response()->json($response);
+            }
+
+            return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
 
@@ -128,7 +184,7 @@ class DisciplinasController extends Controller
     {
         $disciplina = $this->repository->find($id);
 
-        dd($disciplina);
+        dd('show', $disciplina);
 
         if (request()->wantsJson()) {
 
@@ -149,10 +205,12 @@ class DisciplinasController extends Controller
      */
     public function edit($id)
     {
-        dd('edit' + $id);
         $disciplina = $this->repository->find($id);
+        $turmas = $this->turmasRepository->all();
+        $matrizes = $this->matrizesRepository->all();
+        $disciplinas = $this->repository->all();
 
-        return view('disciplinas.edit', compact('disciplina'));
+        return view('disciplinas.edit', compact('disciplina', 'matrizes', 'disciplinas', 'turmas'));
     }
 
     /**
@@ -167,34 +225,61 @@ class DisciplinasController extends Controller
      */
     public function update(DisciplinasUpdateRequest $request, $id)
     {
-        try {
+        try 
+        {
+            $data = $request->all();
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            $disciplina = $this->repository->update($request->all(), $id);
+            $disciplina = $this->repository->update($data, $id);
+
+            $disciplina->preRequisitos()->detach();
+            $disciplina->equivalencias()->detach();
+
+            if(isset($data['pre_requisitos'])) {
+                $disciplina->preRequisitos()->attach($data['pre_requisitos']);
+            }
+            if(isset($data['equivalencias'])) {
+                $disciplina->equivalencias()->attach($data['equivalencias']);
+            }
 
             $response = [
-                'message' => 'Disciplinas updated.',
+                'success' => true,
+                'message' => 'Disciplina alterada.',
                 'data'    => $disciplina->toArray(),
             ];
 
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
 
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
+            session()->flash('response', $response);
+            
+            return redirect()->back();
+        } 
+        catch (\Exception $e) 
+        {
+            // If errors...
+            switch (get_class($e)) {
 
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
+                case ValidatorException::class:
+                $message = $e->getMessageBag();
+                break;
+                default:
+                $message = $e->getMessage();
+                break;
             }
 
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+
+            if ($request->wantsJson()) {
+                return response()->json($response);
+            }
+
+            return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
 
@@ -208,17 +293,39 @@ class DisciplinasController extends Controller
      */
     public function destroy($id)
     {
-        dd('destroy' + $id);
-        $deleted = $this->repository->delete($id);
+        try 
+        {
+            $deleted = $this->repository->delete($id);
 
-        if (request()->wantsJson()) {
+            $response = [
+                'success' => true,
+                'message' => 'Disciplina deletada.',
+                'data'    => $deleted,
+            ];
 
-            return response()->json([
-                'message' => 'Disciplinas deleted.',
-                'deleted' => $deleted,
-            ]);
+            if (request()->wantsJson()) {
+                return response()->json($response);
+            }
+
+            session()->flash('response', $response);
+
+            return redirect()->back();
         }
+        catch (\Exception $e) 
+        {
+            // dd($e);            
+            $message = $e->getMessage();
 
-        return redirect()->back()->with('message', 'Disciplinas deleted.');
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+
+            if (request()->wantsJson()) {
+                return response()->json($response);
+            }
+
+            return redirect()->back()->withErrors($response['message'])->withInput();
+        }
     }
 }
