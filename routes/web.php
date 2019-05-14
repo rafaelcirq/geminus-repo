@@ -33,7 +33,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/listarusuario', 'UsuarioController@listar');
     Route::post('/listarusuario', 'UsuarioController@list');
 
-
     Route::get('/trocarsenha', 'UsuarioController@trocarSenha');
     Route::post('/trocarsenha', 'UsuarioController@alterarSenha');
 
@@ -44,6 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('matrizes', 'MatrizesController');
 
     Route::resource('disciplinas', "DisciplinasController");
+    Route::get('equivalencias', "DisciplinasController@equivalencias");
 
     Route::resource('turmas', "TurmasController");
     Route::get('turma-horarios/{id}', "TurmasController@getHorarios");

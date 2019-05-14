@@ -94,18 +94,6 @@ class DisciplinasController extends Controller
         return view('disciplinas.create', compact('matrizes', 'disciplinas', 'turmas'));
     }
 
-    // public function createPreRequisitos(array $preRequisitosId = null)
-    // {
-    //     $pre = [];
-    //     $d = new Disciplinas();
-    //     $d = $this->repository->find($preRequisitosId);
-    //     if(isset($d)) {
-    //         dd($d);
-    //     } else {
-    //         dd("erro");
-    //     }
-    // }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -327,5 +315,11 @@ class DisciplinasController extends Controller
 
             return redirect()->back()->withErrors($response['message'])->withInput();
         }
+    }
+
+    public function equivalencias() {
+        $matrizes = $this->matrizesRepository->all();
+
+        return view('disciplinas.equivalencias', compact('matrizes'));
     }
 }
