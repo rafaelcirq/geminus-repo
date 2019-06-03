@@ -1,16 +1,14 @@
-<input value="{{ isset($matriz) ? $matriz->id : null }}" name="id" hidden>
-
+<input value="{{ isset($matrizes) ? $matrizes->id : null }}" name="id" hidden>        
 <div class="form-group m-form__group row">
-    <div class="col-lg-3">
-        <label>
-            Ano:
-        </label>
-        <select class="form-control m-select2" name="ano">
-            {{$ano=date("Y")}}
-                @for ($i = 2000; $i <= $ano+1;  $i++)
+    <div class="col-lg-3 m-form__group-sub">
+        <label >Ano*:</label>
+        <select class="form-control m-select2" name="ano" id="ano" data-toggle="m-tooltip" title="Selecione o ano da matriz">
+            <option value="">Selecione o ano</option>
+            {{$ano=date("Y")+1}}
+                @for ($i = $ano; $i >=2000;  $i--)
                     <option value="{{ $i }}"
-                    @isset($matriz)
-                        @if($i == substring($matriz->nome(),4))
+                    @isset($matrizes)
+                        @if($i == substr($matrizes->nome,0,4))
                             selected
                         @endif
                     @endisset>
@@ -19,15 +17,15 @@
                 @endfor
             </select>
     </div>
-    <div class="col-lg-3">
-            <label>
-                Semestre:
-                </label>
-            <select class="form-control m-select2" name="semestre">
-                @for ($i = 1; $i < 11;  $i++)
-                    <option value="{{ $i }}"
-                    @isset($matriz)
-                        @if($i == substring($matriz->nome(),4,1))
+    <div class="col-lg-3 m-form__group-sub">
+        <label >Semestre*:</label>
+        <select class="form-control m-select2" name="semestre">
+            <option value="">Selecione o semestre</option>
+                @for ($i = 1; $i < 3;  $i++)
+                    <option value="{{ $i }}"   
+                    @isset($matrizes)
+                        
+                        @if($i == substr($matrizes->nome,5))
                             selected
                         @endif
                     @endisset>
@@ -35,18 +33,20 @@
                     </option>
                 @endfor
             </select>
-        </div>
+    </div>
+   
 </div>
 <div class="form-group m-form__group row">
     <div class="col-lg-6">
         <label>
-            Curso:
+            Curso*:
         </label>
         <select class="form-control m-select2" name="cursos_id">
+        <option value="">Selecione o curso</option>
             @foreach ($cursos as $curso)
                 <option value="{{ $curso->id }}" 
-                    @isset($matriz)
-                    @if($matriz->cursos->id == $cursos->id)
+                    @isset($matrizes)
+                    @if($matrizes->cursos_id == $curso->id)
                         selected
                     @endif
                     @endisset
@@ -56,14 +56,20 @@
             @endforeach
         <select>
     </div>
-    <div class="col-lg-3">
-        <label>
-            Status:
-        </label>
-        <select class="form-control m-bootstrap-select" name="ativa">
-               
-                    <option value="1"> Ativa </option>
-                    <option value="0">Inativa </option>
+    <div class="col-lg-3 m-form__group-sub">
+        <label>Status*:</label>
+        <select class="form-control m-select2" name="ativa">
+            <option value="">Selecione o status</option>
+                    <option value="1"
+                        @isset($matrizes)
+                            @if($matrizes->ativa == 1) selected  @endif
+                    @endisset
+                    > Ativa </option>
+                    <option value="0"
+                    @isset($matrizes)
+                            @if($matrizes->ativa == 0) selected  @endif
+                    @endisset
+                    >Inativa </option>
                 
             </select>
     </div>

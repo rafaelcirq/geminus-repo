@@ -26,7 +26,7 @@ class MatrizesTransformer extends TransformerAbstract
             'id'         => (int) $model->id,
 
             'nome'       => $model->nome,
-            'ativa'      => $model->ativa == 1 ? "Ativa" : "Inativa",  
+            'ativa'      => $model->ativa == 1 ? " Ativa" : "Inativa",  
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at
         ];

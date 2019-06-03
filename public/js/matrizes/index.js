@@ -21,7 +21,7 @@ var DatatableDataLocalDemo = function () {
                             if (typeof raw.data !== 'undefined') {
                                 dataSet = raw.data;
                             }
-                            console.log(dataSet);
+                             console.log(dataSet);
                             return dataSet;
                         },
                     },
@@ -47,8 +47,17 @@ var DatatableDataLocalDemo = function () {
 			pagination: true,
 
 			search: {
-				input: $('#generalSearch')
-			},
+				input: $('#generalSearch'),
+            },
+            translate:{
+                toolbar:{
+                    pagination:{
+                        items:{
+                            info: 'Mostrando {{start}} - {{end}} de {{total}} registros',
+                        }
+                    }
+                }
+            },
 
 			// inline and bactch editing(cooming soon)
             // editable: false,
@@ -62,7 +71,7 @@ var DatatableDataLocalDemo = function () {
         		selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 			}, {
 				field: "nome",
-				title: "Nome"
+				title: "Semestre"
 			}, {
 				field: "curso.data.nome",
 				title: "Curso"
@@ -74,13 +83,13 @@ var DatatableDataLocalDemo = function () {
 			}, {
 				field: "Ações",
 				width: 110,
-				title: "Actions",
+				title: "Acões",
 				sortable: false,
 				overflow: 'visible',
 				template: function (row, index, datatable) {
 					var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 					return '\
-						<a href="disciplinas/'+ row.id + '/edit" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Editar">\
+						<a href="matrizes/'+ row.id + '/edit" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Editar">\
                             <i class="la la-edit"></i>\
                         </a>\
                         <a data-id="'+ row.id +'" row-index="'+ index +'" class="m_sweetalert_delete m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Excluir">\
@@ -91,10 +100,19 @@ var DatatableDataLocalDemo = function () {
 			}]
 		});
 
-		var query = datatable.getDataSourceQuery();
+        var query = datatable.getDataSourceQuery();
+        
+        var search = datatable.search($(m_form_matrizes).val());
 
-		$('#m_form_curso').on('change', function() {
-            // datatable.search($(this).val().toLowerCase(), 'curso');
+		$('#m_form_matrizes').on('change', function() {
+             datatable.search($(this).val().toLowerCase(), 'nome');
+        });
+
+        $('#m_form_curso').on('change', function() {
+            datatable.search($(this).val().toLowerCase(), 'curso.data.nome');
+       });
+       $('#m_form_status').on('change', function() {
+            datatable.search($(this).val(), 'ativa');
         });
 
 		$(document).on('click', '.m_sweetalert_delete', function() {

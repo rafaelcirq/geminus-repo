@@ -12,7 +12,7 @@
             <div class="m-portlet__head-caption">
                 <div class="m-portlet__head-title">
                     <h3 class="m-portlet__head-text">
-                        Matriz
+                        Matrizes
                         <small>
                             Nova Matriz
                         </small>
@@ -35,7 +35,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-12">
                         
-                            <button type="submit" class="btn m-btn--square  btn-success m-btn m-btn--custom m-btn--bolder m-btn--uppercase">
+                            <button type="submit" id="enviar" class="btn m-btn--square  btn-success m-btn m-btn--custom m-btn--bolder m-btn--uppercase">
                                 <i class="la la-thumbs-up"></i>
                                 Salvar
                             </button>

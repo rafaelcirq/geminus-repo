@@ -23,7 +23,10 @@ class MatrizesUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        return [ 'ano' => 'required',
+        'semestre' => 'required',
+        'cursos_id' => 'required',
+        'ativa' => 'required'
             //
         ];
     }
