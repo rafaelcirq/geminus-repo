@@ -88,6 +88,10 @@ var Form = function ()
                     // If not update, clear the form.
                     if (!$("input[name='_method']").val()) {
                         form.clearForm(); // clear form
+                        $('#curso').val(null).trigger("change");
+                        $('#ano').val(null).trigger("change");
+                        $('#status').val(null).trigger("change");
+                        $('#semestre').val(null).trigger("change");
                         $('#role').val(null).trigger('change');
                         form.validate().resetForm(); // reset validation states
                     }

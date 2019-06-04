@@ -19,7 +19,7 @@
     </div>
     <div class="col-lg-3 m-form__group-sub">
         <label >Semestre*:</label>
-        <select class="form-control m-select2" name="semestre">
+        <select class="form-control m-select2" name="semestre" id="semestre">
             <option value="">Selecione o semestre</option>
                 @for ($i = 1; $i < 3;  $i++)
                     <option value="{{ $i }}"   
@@ -41,7 +41,7 @@
         <label>
             Curso*:
         </label>
-        <select class="form-control m-select2" name="cursos_id">
+        <select class="form-control m-select2" name="cursos_id" id="curso">
         <option value="">Selecione o curso</option>
             @foreach ($cursos as $curso)
                 <option value="{{ $curso->id }}" 
@@ -58,7 +58,7 @@
     </div>
     <div class="col-lg-3 m-form__group-sub">
         <label>Status*:</label>
-        <select class="form-control m-select2" name="ativa">
+        <select class="form-control m-select2" name="ativa" id="status">
             <option value="">Selecione o status</option>
                     <option value="1"
                         @isset($matrizes)

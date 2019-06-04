@@ -80,7 +80,7 @@
         </div> -->
         <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
             <div class="row align-items-center row align-items-center m--margin-left-10">
-                <div class="col-xl-8 order-2 order-xl-1">
+                <div class="col-xl-10 order-2 order-xl-1">
                     <div class="form-group m-form__group row align-items-center">
 
                         <div class="form-group m-form__group row align-items-center" style="width: 100%">
@@ -119,7 +119,7 @@
                                             Todos
                                         </option>
                                         @foreach ($matrizes as $matriz)
-                                            <option value="{{ $matriz->nome }}">
+                                            <option value="{{ $matriz->id }}">
                                                 {{ $matriz->nome }} - {{ $matriz->curso->nome }}
                                             </option>
                                         @endforeach
@@ -165,7 +165,7 @@
 
                     </div>
                 </div>
-                <div class="col-xl-1 order-1 order-xl-2 m--align-right">
+                <div class="col-xl-1 order-1 order-xl-2 m--align-right" style="padding-left:0px;">
                     <a href="{{ route('matrizes.create') }}" href="#" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
                         <span>
                             <i class="flaticon-plus"></i>

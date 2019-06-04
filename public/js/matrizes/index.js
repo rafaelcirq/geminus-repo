@@ -47,7 +47,7 @@ var DatatableDataLocalDemo = function () {
 			pagination: true,
 
 			search: {
-				input: $('#generalSearch'),
+				input: $('#m_form_curso'),
             },
             translate:{
                 toolbar:{
@@ -105,7 +105,7 @@ var DatatableDataLocalDemo = function () {
         var search = datatable.search($(m_form_matrizes).val());
 
 		$('#m_form_matrizes').on('change', function() {
-             datatable.search($(this).val().toLowerCase(), 'nome');
+             datatable.search($(this).val().toLowerCase(), 'id');
         });
 
         $('#m_form_curso').on('change', function() {
