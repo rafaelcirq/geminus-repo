@@ -23,7 +23,7 @@ class MatrizesValidator extends LaravelValidator
     protected $rules = [
         ValidatorInterface::RULE_CREATE => [
             'cursos_id' => 'required',
-            'nome'      => 'required|max:191|unique:matrizes'
+            'nome'      => 'required|max:191'
            // .'|unique:matrizes,nome,$this->nome,NULL,nome,cursos_id,$this->curso'
             ,
             'ativa'     => 'required'

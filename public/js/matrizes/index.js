@@ -20,6 +20,11 @@ var DatatableDataLocalDemo = function () {
                             var dataSet = raw;
                             if (typeof raw.data !== 'undefined') {
                                 dataSet = raw.data;
+                                //console.log(dataSet);
+                                $.each(dataSet, function(key, value){
+                                    dataSet[key]['nomeCurso'] =value.curso.data.nome;
+                                   //console.log(value.curso.data.nome);
+                                });
                             }
                              console.log(dataSet);
                             return dataSet;
@@ -73,7 +78,7 @@ var DatatableDataLocalDemo = function () {
 				field: "nome",
 				title: "Semestre"
 			}, {
-				field: "curso.data.nome",
+				field: "nomeCurso",
 				title: "Curso"
 			},
 			{
@@ -109,7 +114,7 @@ var DatatableDataLocalDemo = function () {
         });
 
         $('#m_form_curso').on('change', function() {
-            datatable.search($(this).val().toLowerCase(), 'curso.data.nome');
+            datatable.search($(this).val().toLowerCase(), 'nomeCurso');
        });
        $('#m_form_status').on('change', function() {
             datatable.search($(this).val(), 'ativa');
@@ -153,7 +158,7 @@ var DatatableDataLocalDemo = function () {
 
                         // Removing the row
                         datatable.row('[data-row="'+ index +'"]').remove();
-                        // $('.m_datatable').mDatatable('reload');
+                         $('.m_datatable').mDatatable('reload');
 
                         swal({
                             position: 'top-right',

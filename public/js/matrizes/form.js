@@ -69,7 +69,6 @@ var Form = function ()
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response, status) {
-
                 mApp.unblockPage();
                 var alert = $('#m_form_error_msg');
 
