@@ -83,6 +83,11 @@ class MatrizesController extends Controller
             $data = $request->all();        
             $data['nome'] = $data['ano']."/".$data['semestre']; 
             $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
+            //$response = validaCreate($data);
+            // if(!$response['sucess']){
+            //     dd($response);
+            //     throw new Exception("Matriz já cadastrada");
+            // }
             $matriz = $this->repository->create($data);
             $response = [
                 'success' => true,
@@ -122,6 +127,30 @@ class MatrizesController extends Controller
 
             return redirect()->back()->withErrors($response['message'])->withInput();
         }
+    }
+
+    public function validaCreate(MatrizesCreateRequest $data){
+        $nome = data['nome'];
+        $cursos = data['cursos_id'];
+        $messages = [
+            'nome.cursos_id.unique' => 'Matriz já cadastrada',
+        ];
+        
+        Validator::make($data, [
+            'nome.cursos_id' => [
+                'required',
+                Rule::unique('matrizes')->where(function ($query) use($nome,$cursos) {
+                    return $query->where('nome', $nome)
+                    ->where('cursos_id', $curso);
+                }),
+            ],
+        ],
+        $messages
+        );
+        return $response = [
+            'success' => false,
+            'message' => $message,
+        ];
     }
    
     /**
@@ -178,8 +207,12 @@ class MatrizesController extends Controller
             $data = $request->all();        
             $data['nome'] = $data['ano']."/".$data['semestre']; 
             $this->validator->with($data)>setId($data['id'])->passesOrFail(ValidatorInterface::RULE_UPDATE);
+            //$response = validaCreate($data);
+            // if(!$response['sucess']){
+            //     dd($response);
+            //     throw new Exception("Matriz já cadastrada");
+            // }
             $matrizes = $this->repository->update($data, $id);
-
             $response = [
                 'success' => true,
                 'message' => 'Registro alterado com sucesso',
@@ -216,6 +249,29 @@ class MatrizesController extends Controller
 
             return redirect()->back()->withErrors($response['message'])->withInput();
         }
+    }
+    public function validaUpdate(MatrizesCreateRequest $data){
+        $nome = data['nome'];
+        $cursos = data['cursos_id'];
+        $messages = [
+            'nome.cursos_id.unique' => 'Matriz já cadastrada',
+        ];
+        
+        Validator::make($data, [
+            'nome.cursos_id' => [
+                'required',
+                Rule::unique('matrizes')->where(function ($query) use($nome,$cursos) {
+                    return $query->where('nome', $nome)
+                    ->where('cursos_id', $curso);
+                })->ignore($data['id']),
+            ],
+        ],
+        $messages
+        );
+        return $response = [
+            'success' => false,
+            'message' => $message,
+        ];
     }
 
     public function create()
