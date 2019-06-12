@@ -13,6 +13,7 @@
 
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/login', 'MainController@index');
+    Route::get('/', 'MainController@index');
     Route::post('/login/checklogin', 'MainController@checklogin');
     Route::get('/login', 'MainController@index')->name('login');
     Route::get('/esqueceusenha', 'EmailController@index');
