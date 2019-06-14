@@ -83,25 +83,29 @@ class MatrizesController extends Controller
             $data = $request->all();        
             $data['nome'] = $data['ano']."/".$data['semestre']; 
             $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
-            //$response = validaCreate($data);
-            // if(!$response['sucess']){
-            //     dd($response);
-            //     throw new Exception("Matriz já cadastrada");
-            // }
-            $matriz = $this->repository->create($data);
-            $response = [
-                'success' => true,
-                'message' => 'Registro realizado com sucesso',
-                'data'    => $matriz->toArray(),
-            ];
+            $response = $this->validaCreate($request);
+            if($response['success']){
+                $matriz = $this->repository->create($data);
+                $response = [
+                    'success' => true,
+                    'message' => 'Registro realizado com sucesso',
+                    'data'    => $matriz->toArray(),
+                ];
+
+                if ($request->wantsJson()) {
+                    return response()->json($response);
+                }
+
+                session()->flash('response', $response);
+
+                return redirect()->back();
+            }
 
             if ($request->wantsJson()) {
                 return response()->json($response);
             }
 
-            session()->flash('response', $response);
-
-            return redirect()->back();
+            return redirect()->back()->withErrors($response['message'])->withInput();
         } 
         catch (\Exception $e) 
         {
@@ -130,26 +134,25 @@ class MatrizesController extends Controller
     }
 
     public function validaCreate(MatrizesCreateRequest $data){
-        $nome = data['nome'];
-        $cursos = data['cursos_id'];
+        $nome =  $data['ano']."/".$data['semestre']; 
+        $cursos = $data['cursos_id'];
         $messages = [
             'nome.cursos_id.unique' => 'Matriz já cadastrada',
         ];
-        
-        Validator::make($data, [
-            'nome.cursos_id' => [
-                'required',
-                Rule::unique('matrizes')->where(function ($query) use($nome,$cursos) {
-                    return $query->where('nome', $nome)
-                    ->where('cursos_id', $curso);
-                }),
-            ],
-        ],
-        $messages
-        );
-        return $response = [
-            'success' => false,
-            'message' => $message,
+        $response = $this->repository->findWhere([
+            'nome' => $nome,
+            'cursos_id' => $cursos
+            //['id', '!=', $data['id']
+        ]);
+
+        if(count($response)>0){
+            return $response = [
+                'success' => false,
+                'message' => "Matriz já cadastrada",
+            ];
+        }
+        return  $response = [
+            'success' => true
         ];
     }
    
@@ -206,26 +209,29 @@ class MatrizesController extends Controller
 
             $data = $request->all();        
             $data['nome'] = $data['ano']."/".$data['semestre']; 
-            $this->validator->with($data)>setId($data['id'])->passesOrFail(ValidatorInterface::RULE_UPDATE);
-            //$response = validaCreate($data);
-            // if(!$response['sucess']){
-            //     dd($response);
-            //     throw new Exception("Matriz já cadastrada");
-            // }
-            $matrizes = $this->repository->update($data, $id);
-            $response = [
-                'success' => true,
-                'message' => 'Registro alterado com sucesso',
-                'data'    => $matrizes->toArray(),
-            ];
+            $this->validator->with($data)->setId($data['id'])->passesOrFail(ValidatorInterface::RULE_UPDATE);
+            $response = $this->validaUpdate($request);
+            if($response['success']){
+                $matrizes = $this->repository->update($data, $id);
+                $response = [
+                    'success' => true,
+                    'message' => 'Registro alterado com sucesso',
+                    'data'    => $matrizes->toArray(),
+                ];
 
+                if ($request->wantsJson()) {
+                    return response()->json($response);
+                }
+
+                session()->flash('response', $response);
+
+                return redirect()->back();
+            }
             if ($request->wantsJson()) {
                 return response()->json($response);
             }
 
-            session()->flash('response', $response);
-
-            return redirect()->back();
+            return redirect()->back()->withErrors($response['message'])->withInput();
         } catch (ValidatorException $e) {
 
             switch (get_class($e)) {
@@ -250,28 +256,38 @@ class MatrizesController extends Controller
             return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
-    public function validaUpdate(MatrizesCreateRequest $data){
-        $nome = data['nome'];
-        $cursos = data['cursos_id'];
+    public function validaUpdate(MatrizesUpdateRequest $data){
+        $nome =  $data['ano']."/".$data['semestre']; 
+        $cursos = $data['cursos_id'];
         $messages = [
             'nome.cursos_id.unique' => 'Matriz já cadastrada',
         ];
-        
-        Validator::make($data, [
-            'nome.cursos_id' => [
-                'required',
-                Rule::unique('matrizes')->where(function ($query) use($nome,$cursos) {
-                    return $query->where('nome', $nome)
-                    ->where('cursos_id', $curso);
-                })->ignore($data['id']),
-            ],
-        ],
-        $messages
-        );
+        $response = $this->repository->findWhere([
+            'nome' => $nome,
+            'cursos_id' => $cursos
+        ]);
+
+        if(count($response)>1){
+            return $return = [
+                'success' => false,
+                'message' => "Matriz já cadastrada",
+            ];
+          
+        }
+        else if(count($response)==1){
+            if($response[0]['id']==$data['id']){
+                return $response = [
+                    'success' => true];
+            }
+            else{
+                return $return = [
+                    'success' => false,
+                    'message' => "Matriz já cadastrada",
+                ];
+            }
+        }
         return $response = [
-            'success' => false,
-            'message' => $message,
-        ];
+            'success' => true];
     }
 
     public function create()

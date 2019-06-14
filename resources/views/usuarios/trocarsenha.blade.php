@@ -56,8 +56,9 @@
             <div class="m-form__actions m-form__actions">
                 <div class="row">
                     <div class="col-lg-9 ml-lg-auto">
-                        <button type="submit" class="btn btn-accent">Salvar</button>
-                        <a class="btn btn-secondary" href=" {{ url('/listarusuario') }}">Voltar</a>
+                        <button type="submit" class="btn m-btn--square  btn-success m-btn m-btn--custom m-btn--bolder m-btn--uppercase">
+                                <i class="la la-thumbs-up"></i>Salvar</button>
+                        <a class="btn m-btn--square btn-secondary m-btn m-btn--custom m-btn--uppercase" href=" {{ url('/listarusuario') }}">Voltar</a>
                     </div>
                 </div>
             </div>

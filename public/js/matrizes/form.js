@@ -97,7 +97,7 @@ var Form = function ()
                 } else {
                     console.log('erro', response.message.nome);
                     //$('#enviar').click(function(e) {
-                       if(response.message.nome =="Matriz já cadastrada")
+                       if(response.message =="Matriz já cadastrada")
                             swal("Matriz já cadastrada!", "Informe ano, semestre ou curso diferente", "error");
                         else
                    // });
