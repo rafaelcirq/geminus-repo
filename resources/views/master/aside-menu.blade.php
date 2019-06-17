@@ -2,7 +2,11 @@
     m-menu-scrollable="0" m-menu-dropdown-timeout="500">
     <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
         <li class="m-menu__item  m-menu__item--active" aria-haspopup="true">
+<<<<<<< HEAD
             <a href="/equivalencias" class="m-menu__link ">
+=======
+            <a href="/listarusuario" class="m-menu__link ">
+>>>>>>> master
                 <i class="m-menu__link-icon fa fa-home"></i>
                 <span class="m-menu__link-title">
                     <span class="m-menu__link-wrap">
@@ -20,10 +24,10 @@
             <i class="m-menu__section-icon flaticon-more-v3"></i>
         </li>
         <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-            <a href="/cursos" class="m-menu__link m-menu__toggle">
+            <a href="/matrizes" class="m-menu__link m-menu__toggle">
                 <i class="m-menu__link-icon flaticon-folder-3"></i>
                 <span class="m-menu__link-text">
-                    Cursos
+                    Matrizes
                 </span>
             </a>
         </li>

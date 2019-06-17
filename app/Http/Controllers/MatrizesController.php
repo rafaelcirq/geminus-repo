@@ -10,7 +10,11 @@ use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\MatrizesCreateRequest;
 use App\Http\Requests\MatrizesUpdateRequest;
 use App\Repositories\MatrizesRepository;
+use App\Repositories\CursosRepository;
+use App\Presenters\MatrizesPresenter;
 use App\Validators\MatrizesValidator;
+use Validator;
+use Illuminate\Validation\Rule;
 
 /**
  * Class MatrizesController.
@@ -35,10 +39,12 @@ class MatrizesController extends Controller
      * @param MatrizesRepository $repository
      * @param MatrizesValidator $validator
      */
-    public function __construct(MatrizesRepository $repository, MatrizesValidator $validator)
+    public function __construct(CursosRepository $cursosRepository,MatrizesRepository $repository, MatrizesValidator $validator)
     {
-        $this->repository = $repository;
-        $this->validator  = $validator;
+            $this->cursosRepository = $cursosRepository;
+            $this->repository = $repository;
+            $this->validator  = $validator;
+        
     }
 
     /**
@@ -49,16 +55,16 @@ class MatrizesController extends Controller
     public function index()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $matrizes = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $matrizes,
-            ]);
+        
+        if (request()->wantsJson())  {
+            $this->repository->setPresenter(MatrizesPresenter::class);
+            $matrizes = $this->repository->orderBy('nome', 'desc')->all();
+            return $matrizes;
         }
+        $matrizes = $this->repository->orderBy('nome', 'desc')->all();
+        $cursos = $this->cursosRepository->orderBy('nome', 'asc')->all();
 
-        return view('matrizes.index', compact('matrizes'));
+        return view('matrizes.index', compact( 'cursos', 'matrizes'));
     }
 
     /**
@@ -72,35 +78,84 @@ class MatrizesController extends Controller
      */
     public function store(MatrizesCreateRequest $request)
     {
-        try {
+        try 
+        {
+            $data = $request->all();        
+            $data['nome'] = $data['ano']."/".$data['semestre']; 
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
+            $response = $this->validaCreate($request);
+            if($response['success']){
+                $matriz = $this->repository->create($data);
+                $response = [
+                    'success' => true,
+                    'message' => 'Registro realizado com sucesso',
+                    'data'    => $matriz->toArray(),
+                ];
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
+                if ($request->wantsJson()) {
+                    return response()->json($response);
+                }
 
-            $matrize = $this->repository->create($request->all());
+                session()->flash('response', $response);
 
-            $response = [
-                'message' => 'Matrizes created.',
-                'data'    => $matrize->toArray(),
-            ];
+                return redirect()->back();
+            }
 
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
 
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
+            return redirect()->back()->withErrors($response['message'])->withInput();
+        } 
+        catch (\Exception $e) 
+        {
+            // If errors...
+            switch (get_class($e)) {
+
+                case ValidatorException::class:
+                $message = $e->getMessageBag();
+                break;
+                default:
+                $message = $e->getMessage();
+                break;
             }
 
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+
+            if ($request->wantsJson()) {
+                return response()->json($response);
+            }
+
+            return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
 
+    public function validaCreate(MatrizesCreateRequest $data){
+        $nome =  $data['ano']."/".$data['semestre']; 
+        $cursos = $data['cursos_id'];
+        $messages = [
+            'nome.cursos_id.unique' => 'Matriz já cadastrada',
+        ];
+        $response = $this->repository->findWhere([
+            'nome' => $nome,
+            'cursos_id' => $cursos
+            //['id', '!=', $data['id']
+        ]);
+
+        if(count($response)>0){
+            return $response = [
+                'success' => false,
+                'message' => "Matriz já cadastrada",
+            ];
+        }
+        return  $response = [
+            'success' => true
+        ];
+    }
+   
     /**
      * Display the specified resource.
      *
@@ -110,16 +165,17 @@ class MatrizesController extends Controller
      */
     public function show($id)
     {
-        $matrize = $this->repository->find($id);
+        $matrizes = $this->repository->find($id);
+        $cursos = $this->cursosRepository->all();
 
         if (request()->wantsJson()) {
 
             return response()->json([
-                'data' => $matrize,
+                'data' => $matrizes,
             ]);
         }
 
-        return view('matrizes.show', compact('matrize'));
+        return view('matrizes.show', compact('matrizes','cursos'));
     }
 
     /**
@@ -131,9 +187,10 @@ class MatrizesController extends Controller
      */
     public function edit($id)
     {
-        $matrize = $this->repository->find($id);
+        $matrizes = $this->repository->find($id);
+        $cursos = $this->cursosRepository->all();
 
-        return view('matrizes.edit', compact('matrize'));
+        return view('matrizes.edit', compact('matrizes','cursos'));
     }
 
     /**
@@ -150,35 +207,95 @@ class MatrizesController extends Controller
     {
         try {
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
+            $data = $request->all();        
+            $data['nome'] = $data['ano']."/".$data['semestre']; 
+            $this->validator->with($data)->setId($data['id'])->passesOrFail(ValidatorInterface::RULE_UPDATE);
+            $response = $this->validaUpdate($request);
+            if($response['success']){
+                $matrizes = $this->repository->update($data, $id);
+                $response = [
+                    'success' => true,
+                    'message' => 'Registro alterado com sucesso',
+                    'data'    => $matrizes->toArray(),
+                ];
 
-            $matrize = $this->repository->update($request->all(), $id);
+                if ($request->wantsJson()) {
+                    return response()->json($response);
+                }
 
-            $response = [
-                'message' => 'Matrizes updated.',
-                'data'    => $matrize->toArray(),
-            ];
+                session()->flash('response', $response);
 
+                return redirect()->back();
+            }
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
 
-            return redirect()->back()->with('message', $response['message']);
+            return redirect()->back()->withErrors($response['message'])->withInput();
         } catch (ValidatorException $e) {
 
-            if ($request->wantsJson()) {
+            switch (get_class($e)) {
 
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
+                case ValidatorException::class:
+                $message = $e->getMessageBag();
+                break;
+                default:
+                $message = $e->getMessage();
+                break;
             }
 
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+
+            if ($request->wantsJson()) {
+                return response()->json($response);
+            }
+
+            return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
+    public function validaUpdate(MatrizesUpdateRequest $data){
+        $nome =  $data['ano']."/".$data['semestre']; 
+        $cursos = $data['cursos_id'];
+        $messages = [
+            'nome.cursos_id.unique' => 'Matriz já cadastrada',
+        ];
+        $response = $this->repository->findWhere([
+            'nome' => $nome,
+            'cursos_id' => $cursos
+        ]);
 
+        if(count($response)>1){
+            return $return = [
+                'success' => false,
+                'message' => "Matriz já cadastrada",
+            ];
+          
+        }
+        else if(count($response)==1){
+            if($response[0]['id']==$data['id']){
+                return $response = [
+                    'success' => true];
+            }
+            else{
+                return $return = [
+                    'success' => false,
+                    'message' => "Matriz já cadastrada",
+                ];
+            }
+        }
+        return $response = [
+            'success' => true];
+    }
+
+    public function create()
+    {
+        $cursos = $this->cursosRepository->all();
+
+        return view('matrizes.create', compact('cursos'));
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -189,16 +306,39 @@ class MatrizesController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
+        try 
+        {
+            $deleted = $this->repository->delete($id);
 
-        if (request()->wantsJson()) {
+            $response = [
+                'success' => true,
+                'message' => 'Exclusão realizada com sucesso.',
+                'data'    => $deleted,
+            ];
 
-            return response()->json([
-                'message' => 'Matrizes deleted.',
-                'deleted' => $deleted,
-            ]);
+            if (request()->wantsJson()) {
+                return response()->json($response);
+            }
+
+            session()->flash('response', $response);
+
+            return redirect()->back();
         }
+        catch (\Exception $e) 
+        {
+            // dd($e);            
+            $message = $e->getMessage();
 
-        return redirect()->back()->with('message', 'Matrizes deleted.');
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+
+            if (request()->wantsJson()) {
+                return response()->json($response);
+            }
+
+            return redirect()->back()->withErrors($response['message'])->withInput();
+        }
     }
 }

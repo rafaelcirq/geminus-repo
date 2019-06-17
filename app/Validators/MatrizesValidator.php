@@ -12,6 +12,9 @@ use \Prettus\Validator\LaravelValidator;
  */
 class MatrizesValidator extends LaravelValidator
 {
+    protected $messages = [
+        'nome.unique' => 'Matriz já cadastrada',
+    ];
     /**
      * Validation Rules
      *
@@ -20,7 +23,9 @@ class MatrizesValidator extends LaravelValidator
     protected $rules = [
         ValidatorInterface::RULE_CREATE => [
             'cursos_id' => 'required',
-            'nome'      => 'required|max:191',
+            'nome'      => 'required|max:191'
+           // .'|unique:matrizes,nome,$this->nome,NULL,nome,cursos_id,$this->curso'
+            ,
             'ativa'     => 'required'
         ],
         ValidatorInterface::RULE_UPDATE => [
