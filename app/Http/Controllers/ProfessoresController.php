@@ -61,6 +61,11 @@ class ProfessoresController extends Controller
         return view('professores.index', compact('professores'));
     }
 
+    public function create()
+    {
+        return view('professores.create');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -73,31 +78,47 @@ class ProfessoresController extends Controller
     public function store(ProfessoresCreateRequest $request)
     {
         try {
+            $data =  $request->all();
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
 
-            $professore = $this->repository->create($request->all());
+            $professor = $this->repository->create($data);
 
             $response = [
-                'message' => 'Professores created.',
-                'data'    => $professore->toArray(),
+                'success' => true,
+                'message' => 'Professor cadastrado.',
+                'data'    => $professor->toArray(),
             ];
 
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
 
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
+            session()->flash('response', $response);
+
+            return redirect()->back();
+        } catch (\Exception $e) {
+            // If errors...
+            switch (get_class($e)) {
+
+                case ValidatorException::class:
+                    $message = $e->getMessageBag();
+                    break;
+                default:
+                    $message = $e->getMessage();
+                    break;
             }
 
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+
+            if ($request->wantsJson()) {
+                return response()->json($response);
+            }
+
+            return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
 
@@ -131,9 +152,9 @@ class ProfessoresController extends Controller
      */
     public function edit($id)
     {
-        $professore = $this->repository->find($id);
+        $professor = $this->repository->find($id);
 
-        return view('professores.edit', compact('professore'));
+        return view('professores.edit', compact('professor'));
     }
 
     /**
@@ -189,16 +210,39 @@ class ProfessoresController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
+        try 
+        {
+            $deleted = $this->repository->delete($id);
 
-        if (request()->wantsJson()) {
+            $response = [
+                'success' => true,
+                'message' => 'Profesor deletado.',
+                'data'    => $deleted,
+            ];
 
-            return response()->json([
-                'message' => 'Professores deleted.',
-                'deleted' => $deleted,
-            ]);
+            if (request()->wantsJson()) {
+                return response()->json($response);
+            }
+
+            session()->flash('response', $response);
+
+            return redirect()->back();
         }
+        catch (\Exception $e) 
+        {
+            // dd($e);            
+            $message = $e->getMessage();
 
-        return redirect()->back()->with('message', 'Professores deleted.');
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+
+            if (request()->wantsJson()) {
+                return response()->json($response);
+            }
+
+            return redirect()->back()->withErrors($response['message'])->withInput();
+        }
     }
 }

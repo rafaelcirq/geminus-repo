@@ -29,29 +29,7 @@
                     <div class="form-group m-form__group row align-items-center">
 
                         <div class="form-group m-form__group row align-items-center">
-                            <div class="col-md-4">
-                                <div class="m-form__group m-form__group--inline">
-                                        <div class="m-form__label">
-                                        <label>
-                                            Curso:
-                                        </label>
-                                    </div>
-                                    <div class="m-form__control">
-                                        <select class="form-control m-bootstrap-select" id="m_form_curso">
-                                        <option value="">
-                                            Todos
-                                        </option>
-                                        @foreach ($cursos as $curso)
-                                            <option value="{{ $curso->nome }}">
-                                                {{ $curso->nome }}
-                                            </option>
-                                        @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="d-md-none m--margin-bottom-10"></div>
-                            </div>
-                            <div class="col-md-5">
+                            <div class="col-md-7">
                                 <div class="m-form__group m-form__group--inline">
                                     <div class="m-form__label">
                                         <label class="m-label m-label--single">
@@ -59,12 +37,12 @@
                                         </label>
                                     </div>
                                     <div class="m-form__control">
-                                        <select class="form-control m-bootstrap-select" id="m_form_type">
+                                        <select class="form-control m-select2" id="m_form_matriz">
                                             <option value="">
                                             Todos
                                         </option>
                                         @foreach ($matrizes as $matriz)
-                                            <option value="{{ $matriz->id }}">
+                                            <option value="{{ $matriz->nome }} - {{ $matriz->curso->nome }}">
                                                 {{ $matriz->nome }} - {{ $matriz->curso->nome }}
                                             </option>
                                         @endforeach
@@ -74,7 +52,7 @@
                                 </div>
                                 <div class="d-md-none m--margin-bottom-10"></div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-5">
                                 <div class="m-input-icon m-input-icon--left">
                                     <input type="text" class="form-control m-input m-input--solid" placeholder="Buscar..." id="generalSearch">
                                     <span class="m-input-icon__icon m-input-icon__icon--left">
@@ -102,9 +80,14 @@
             </div>
         </div>
         <!--end: Search Form -->
+        
         <!--begin: Datatable -->
         <div class="m_datatable" id="local_data"></div>
         <!--end: Datatable -->
+
+        {{-- begin: Modal Horarios --}}
+        <div class="modal fade" id="turmas_mostrar_horarios" tabindex="-1" role="dialog"></div>
+        {{-- end: Modal Horarios --}}
 
         <div id="rel_delete_forms">
             @foreach($disciplinas as $disciplina)

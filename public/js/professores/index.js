@@ -6,6 +6,8 @@ var DatatableDataLocalDemo = function () {
 	// demo initializer
 	var demo = function () {
 
+        var dataJSONArray = JSON.parse('[{"RecordID":1,"nome":"Programação I","curso":"Sistemas de Informação","matriz":"2015 / 1","cargaHoraria":"120 horas","periodo":"3º"},{"RecordID":100,"nome":"Estrutura de Dados I","curso":"Sistemas de Informação","matriz":"2015 / 1","cargaHoraria":"120 horas","periodo":"3º"}]');
+		
 		var datatable = $('.m_datatable').mDatatable({
 			// datasource definition
 			data: {
@@ -13,15 +15,11 @@ var DatatableDataLocalDemo = function () {
                 source: {
                     read: {
                         method: 'GET',
-                        url: 'disciplinas',
+                        url: 'professores',
                         map: function (raw) {
                             var dataSet = raw;
                             if (typeof raw.data !== 'undefined') {
-								dataSet = raw.data;
-								
-								jQuery.each(dataSet, function(index, disciplina) {
-									disciplina.cursoMatriz = disciplina.matriz.data.nome + " - " + disciplina.matriz.data.curso.data.nome;
-                                })
+                                dataSet = raw.data;
 							}
                             return dataSet;
                         },
@@ -50,19 +48,6 @@ var DatatableDataLocalDemo = function () {
 			search: {
 				input: $('#generalSearch')
 			},
-            
-            translate:{
-                toolbar:{
-                    pagination:{
-                        items:{
-                            info: 'Mostrando {{start}} - {{end}} de {{total}} registros',
-                        }
-                    }
-                },
-                records:{
-                    noRecords: 'Sem disciplinas cadastradas.'
-                }
-            },
 
 			// inline and bactch editing(cooming soon)
 			// editable: false,
@@ -79,17 +64,6 @@ var DatatableDataLocalDemo = function () {
 				field: "nome",
 				title: "Nome"
 			}, {
-				field: "cursoMatriz",
-				title: "Matriz"
-			}, {
-				field: "cargaHoraria",
-				title: "Carga Horária",
-				responsive: {visible: 'lg'}
-			}, {
-				field: "periodo",
-				title: "Período",
-				responsive: {visible: 'lg'}
-			}, {
 				field: "Actions",
 				width: 110,
 				title: "Actions",
@@ -99,7 +73,7 @@ var DatatableDataLocalDemo = function () {
 					var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
 					return '\
-						<a href="disciplinas/'+ row.id + '/edit" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Editar">\
+						<a href="professores/'+ row.id + '/edit" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Editar">\
                             <i class="la la-edit"></i>\
                         </a>\
                         <a data-id="'+ row.id +'" row-index="'+ index +'" class="m_sweetalert_delete m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Excluir">\
@@ -112,9 +86,9 @@ var DatatableDataLocalDemo = function () {
 
 		var query = datatable.getDataSourceQuery();
 
-		$('#m_form_matriz').on('change', function() {
-            datatable.search($(this).val().toLowerCase(), 'cursoMatriz');
-		});
+		$('#m_form_curso').on('change', function() {
+            // datatable.search($(this).val().toLowerCase(), 'curso');
+        });
 
 		$(document).on('click', '.m_sweetalert_delete', function() {
             // e.preventDefault();

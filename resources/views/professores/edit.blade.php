@@ -2,8 +2,7 @@
 
 @section('js-importados')
 <script src="{{ asset('js/util/select.js') }}"></script>
-<script src="{{ asset('js/disciplinas/form.js') }}"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
+{{-- <script src="{{ asset('js/professores/form.js') }}"></script> --}}
 @endsection
 
 @section('conteudo')
@@ -12,9 +11,9 @@
             <div class="m-portlet__head-caption">
                 <div class="m-portlet__head-title">
                     <h3 class="m-portlet__head-text">
-                        Disciplinas
+                        Professores
                         <small>
-                            Editar disciplina
+                            Editar professor
                         </small>
                     </h3>
                 </div>
@@ -22,15 +21,11 @@
         </div>
         <div class="m-portlet__body">
 
-                @include('layouts.alerts')
+            @include('layouts.alerts')
 
-        {{-- <form method="put" action="{{ route('disciplinas.update', $disciplina->id) }}" id="save_form" class="m-form m-form--state m-form--fit">
-            {{ csrf_field() }}
-            {{ method_field('PUT') }} --}}
+            {{ Form::open(['method' => 'PUT', 'id' => "save_form", 'route' => ['professores.update', $professor->id]]) }}
 
-        {{ Form::open(['method' => 'PUT', 'id' => "save_form", 'route' => ['disciplinas.update', $disciplina->id]]) }}
-
-            @include('disciplinas.form')
+            @include('professores.form')
 
             <div class="m-portlet__foot">
                 <div class="row align-items-center">
@@ -41,7 +36,7 @@
                             Salvar
                         </button>
     
-                        <a href="/disciplinas" class="btn m-btn--square btn-secondary m-btn m-btn--custom m-btn--uppercase">
+                        <a href="/professores" class="btn m-btn--square btn-secondary m-btn m-btn--custom m-btn--uppercase">
                             Cancelar
                         </a>
 
@@ -49,7 +44,7 @@
                 </div>
             </div>
 
-        {{ Form::close() }}
+            {{ Form::close() }}
 
         </div>
     </div>

@@ -37,12 +37,12 @@
                                         </label>
                                     </div>
                                     <div class="m-form__control">
-                                        <select class="form-control m-bootstrap-select" id="m_form_status">
+                                        <select class="form-control m-select2" id="curso">
                                             <option value="">
                                                 Todos
                                             </option>
                                             @foreach ($cursos as $curso)
-                                            <option value="">
+                                            <option value="{{ $curso->nome }}">
                                                     {{ $curso->nome }}
                                                 </option>
                                             @endforeach
@@ -59,12 +59,12 @@
                                         </label>
                                     </div>
                                     <div class="m-form__control">
-                                        <select class="form-control m-bootstrap-select" id="m_form_type">
+                                        <select class="form-control m-select2" id="professor">
                                             <option value="">
                                                 Todos
                                             </option>
                                             @foreach ($professores as $professor)
-                                            <option value="">
+                                            <option value="{{ $professor->nome }}">
                                                     {{ $professor->nome }}
                                                 </option>
                                             @endforeach

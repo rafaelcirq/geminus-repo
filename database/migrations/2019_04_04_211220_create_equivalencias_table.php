@@ -28,6 +28,8 @@ class CreateEquivalenciasTable extends Migration
             ->onUpdate('cascade')
             ->onDelete('cascade');
 
+            $table->primary(['disciplinas_id_1', 'disciplinas_id_2']);
+
             $table->timestamps();
         });
     }

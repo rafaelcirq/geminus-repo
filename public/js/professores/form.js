@@ -2,51 +2,6 @@
 
 var Form = function ()
 {
-
-    var setOpcoesPreRequisitos = function() {
-        var idMatriz = $("#matrizes_id").val();
-
-        $("#pre_requisitos > option").each(function() {
-            var idMatrizOption = $(this).attr('id_matriz');
-            if(idMatrizOption !== idMatriz) {
-                $(this).prop('disabled', true);
-            } else {
-                $(this).prop('disabled', false);
-            }
-        });
-
-        $('#pre_requisitos').select2();
-
-        disableOpcaoDisciplina();
-    }
-
-    var disableOpcaoDisciplina = function() {
-        var idDisciplina = $("#id_disciplina").val();
-        console.log(idDisciplina);
-
-        $("#pre_requisitos > option").each(function() {
-            var idDisciplinaOption = $(this).val();
-            if(idDisciplinaOption === idDisciplina) {
-                $(this).prop('disabled', true);
-            }
-        });
-
-        $("#equivalencias > option").each(function() {
-            var idDisciplinaOption = $(this).val();
-            if(idDisciplinaOption === idDisciplina) {
-                $(this).prop('disabled', true);
-            }
-        });
-    }
-
-    var onMatrizChange = function() {
-        $('#matrizes_id').on('change', function() {
-            setOpcoesPreRequisitos(true);
-            $('#pre_requisitos').val('');
-            $('#pre_requisitos').select2();
-		});
-    }
-
     var validation = function() {
 
         var form = $('#save_form');
@@ -56,27 +11,9 @@ var Form = function ()
             rules: {
                 nome: {
                     required: true
-                },
-                carga_horaria: {
-                    required: true
-                },
-                matrizes_id: {
-                    required: true
-                },
-                periodo: {
-                    required: true
                 }
             }, messages: {
                 "nome": {
-                    required: "Este campo é obrigatório."
-                },
-                "carga_horaria": {
-                    required: "Este campo é obrigatório."
-                },
-                "matrizes_id": {
-                    required: "Este campo é obrigatório."
-                },
-                "periodo": {
                     required: "Este campo é obrigatório."
                 }
             },
@@ -147,17 +84,10 @@ var Form = function ()
         });
     }
 
-    var mask = function() {
-        $('.carga').mask('000');
-    }
-
     return {
         // public functions
         init: function() {
-            mask();
             validation();
-            onMatrizChange();
-            setOpcoesPreRequisitos();
         },
     };
 }();

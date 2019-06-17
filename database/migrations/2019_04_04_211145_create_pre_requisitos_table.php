@@ -27,6 +27,8 @@ class CreatePreRequisitosTable extends Migration
             ->on('disciplinas')
             ->onUpdate('cascade')
             ->onDelete('cascade');
+
+            $table->primary(['disciplinas_id', 'pre_requisito_id']);
             
             $table->timestamps();
         });

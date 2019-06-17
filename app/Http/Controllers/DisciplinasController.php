@@ -72,8 +72,8 @@ class DisciplinasController extends Controller
     public function index()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        
-        if (request()->wantsJson())  {
+
+        if (request()->wantsJson()) {
             $this->repository->setPresenter(DisciplinasPresenter::class);
             $disciplinas = $this->repository->all();
             return $disciplinas;
@@ -105,17 +105,16 @@ class DisciplinasController extends Controller
      */
     public function store(DisciplinasCreateRequest $request)
     {
-        try 
-        {
-            $data = $request->all();        
+        try {
+            $data = $request->all();
             $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
 
             $disciplina = $this->repository->create($data);
 
-            if(isset($data['pre_requisitos'])) {
+            if (isset($data['pre_requisitos'])) {
                 $disciplina->preRequisitos()->attach($data['pre_requisitos']);
             }
-            if(isset($data['equivalencias'])) {
+            if (isset($data['equivalencias'])) {
                 $disciplina->equivalencias()->attach($data['equivalencias']);
             }
 
@@ -134,18 +133,16 @@ class DisciplinasController extends Controller
             session()->flash('response', $response);
 
             return redirect()->back();
-        } 
-        catch (\Exception $e) 
-        {
+        } catch (\Exception $e) {
             // If errors...
             switch (get_class($e)) {
 
                 case ValidatorException::class:
-                $message = $e->getMessageBag();
-                break;
+                    $message = $e->getMessageBag();
+                    break;
                 default:
-                $message = $e->getMessage();
-                break;
+                    $message = $e->getMessage();
+                    break;
             }
 
             $response = [
@@ -213,8 +210,7 @@ class DisciplinasController extends Controller
      */
     public function update(DisciplinasUpdateRequest $request, $id)
     {
-        try 
-        {
+        try {
             $data = $request->all();
 
             $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_UPDATE);
@@ -224,11 +220,11 @@ class DisciplinasController extends Controller
             $disciplina->preRequisitos()->detach();
             $disciplina->equivalencias()->detach();
 
-            if(isset($data['pre_requisitos'])) {
-                $disciplina->preRequisitos()->attach($data['pre_requisitos']);
+            if (isset($data['pre_requisitos'])) {
+                $disciplina->preRequisitos()->sync($data['pre_requisitos']);
             }
-            if(isset($data['equivalencias'])) {
-                $disciplina->equivalencias()->attach($data['equivalencias']);
+            if (isset($data['equivalencias'])) {
+                $disciplina->equivalencias()->sync($data['equivalencias']);
             }
 
             $response = [
@@ -242,20 +238,18 @@ class DisciplinasController extends Controller
             }
 
             session()->flash('response', $response);
-            
+
             return redirect()->back();
-        } 
-        catch (\Exception $e) 
-        {
+        } catch (\Exception $e) {
             // If errors...
             switch (get_class($e)) {
 
                 case ValidatorException::class:
-                $message = $e->getMessageBag();
-                break;
+                    $message = $e->getMessageBag();
+                    break;
                 default:
-                $message = $e->getMessage();
-                break;
+                    $message = $e->getMessage();
+                    break;
             }
 
             $response = [
@@ -281,8 +275,7 @@ class DisciplinasController extends Controller
      */
     public function destroy($id)
     {
-        try 
-        {
+        try {
             $deleted = $this->repository->delete($id);
 
             $response = [
@@ -298,9 +291,7 @@ class DisciplinasController extends Controller
             session()->flash('response', $response);
 
             return redirect()->back();
-        }
-        catch (\Exception $e) 
-        {
+        } catch (\Exception $e) {
             // dd($e);            
             $message = $e->getMessage();
 
@@ -317,9 +308,30 @@ class DisciplinasController extends Controller
         }
     }
 
-    public function equivalencias() {
+    public function equivalencias()
+    {
         $matrizes = $this->matrizesRepository->all();
 
         return view('disciplinas.equivalencias', compact('matrizes'));
+    }
+
+    public function getEquivalencias($id)
+    {
+        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+
+        $disciplina = $this->repository->find($id);
+
+        return view('disciplinas.equivalencias-modal', compact('disciplina'));
+    }
+
+    public function getDisciplinasByMatriz($matrizId)
+    {
+        if (request()->wantsJson()) {
+            $this->repository->setPresenter(DisciplinasPresenter::class);
+            $disciplinas = $this->repository->findByField('matrizes_id', $matrizId);
+            return $disciplinas;
+        } else {
+            dd($disciplinas = $this->repository->findByField('matrizes_id', $matrizId));
+        }
     }
 }

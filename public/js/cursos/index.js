@@ -62,42 +62,47 @@ var Index = function () {
 
             // columns definition
             columns: [{
-                field: "RecordID",
-                title: "#",
-                width: 50,
-                sortable: false,
-                textAlign: 'center',
-                selector: { class: 'm-checkbox--solid m-checkbox--brand' }
-            }, {
+            //     field: "RecordID",
+            //     title: "#",
+            //     width: 50,
+            //     sortable: false,
+            //     textAlign: 'center',
+            //     selector: { class: 'm-checkbox--solid m-checkbox--brand' }
+            // }, {
                 field: "nome",
-                title: "Nome"
+                title: "Nome",
+                textAlign: "center"
             }, {
                 field: "created_at",
                 title: "Dt. Criação",
-                responsive: { visible: 'lg' }
+                responsive: { visible: 'lg' },
+                textAlign: "center"
             }, {
                 field: "updated_at",
                 title: "Dt. Última Atualização",
+                textAlign: "center"
                 // width: 100
-            }, {
-                field: "Actions",
-                width: 110,
-                title: "Ações",
-                sortable: false,
-                overflow: 'visible',
-                template: function (row, index, datatable) {
-                    var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
+            },
+            // {
+            //     field: "Actions",
+            //     width: 110,
+            //     title: "Ações",
+            //     sortable: false,
+            //     overflow: 'visible',
+            //     template: function (row, index, datatable) {
+            //         var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
-                    return '\
-						<a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Editar">\
-                            <i class="la la-edit"></i>\
-                        </a>\
-                        <a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Excluir">\
-                            <i class="la la-trash"></i>\
-                        </a>\
-					';
-                }
-            }]
+            //         return '\
+			// 			<a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Editar">\
+            //                 <i class="la la-edit"></i>\
+            //             </a>\
+            //             <a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Excluir">\
+            //                 <i class="la la-trash"></i>\
+            //             </a>\
+			// 		';
+            //     }
+            // }
+            ]
         });
 
         var query = datatable.getDataSourceQuery();

@@ -13,16 +13,16 @@
 
 		<div id="show_modal" class="modal-body">
 
-            @foreach ($horarios as $horario)
-				{{ $horario->dia }}, {{ $horario->hora_inicio }} às {{ $horario->hora_fim }}<br><br>
+			@foreach ($horarios as $horario)
+			{{ $horario->dia }}, {{ $horario->hora_inicio }} às {{ $horario->hora_fim }}<br><br>
 			@endforeach
-            
+
 		</div>
 
 		<div class="modal-footer">
 			<button type="button" class="btn btn-secondary" data-dismiss="modal">
 				{{ __('Fechar') }}
-			</button>			
+			</button>
 		</div>
 	</div>
 </div>

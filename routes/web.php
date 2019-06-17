@@ -17,11 +17,14 @@ Route::group(['middleware' => ['guest']], function () {
     Route::get('/login', 'MainController@index')->name('login');
     Route::get('/esqueceusenha', 'EmailController@index');
     Route::post('/esqueceusenha', 'EmailController@validaremail');
+
+    Route::get('equivalencias', "DisciplinasController@equivalencias");
+    Route::get('equivalencias/{id}', "DisciplinasController@getEquivalencias");
 });
 
 Route::get('/geminus', 'MainController@sucesso');
 
-Route::group(['middleware' => ['auth']], function () {
+// Route::group(['middleware' => ['auth']], function () {
     Route::get('/cadastrarusuario', 'UsuarioController@index');
     Route::post('/cadastrarusuario', 'UsuarioController@cadastrar');
     Route::get('cadastrarusuario/{id}', 'UsuarioController@editar');
@@ -42,9 +45,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('matrizes', 'MatrizesController');
 
+    Route::resource('professores', 'ProfessoresController');
+
     Route::resource('disciplinas', "DisciplinasController");
-    Route::get('equivalencias', "DisciplinasController@equivalencias");
+    Route::get('disciplinas/{id}/matriz', "DisciplinasController@getDisciplinasByMatriz");
 
     Route::resource('turmas', "TurmasController");
     Route::get('turma-horarios/{id}', "TurmasController@getHorarios");
-});
+// });
