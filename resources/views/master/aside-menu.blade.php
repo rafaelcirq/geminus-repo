@@ -51,6 +51,14 @@
                 </span>
             </a>
         </li>
+        <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+            <a href="/cursos" class="m-menu__link m-menu__toggle">
+                <i class="m-menu__link-icon flaticon-file"></i>
+                <span class="m-menu__link-text">
+                    Cursos
+                </span>
+            </a>
+        </li>
         <li class="m-menu__section">
             <h4 class="m-menu__section-text">
                 Usuários
