@@ -5,8 +5,6 @@
             <div class="m-stack__item m-brand  m-brand--skin-dark ">
                 <div class="m-stack m-stack--ver m-stack--general">
                     <div class="m-stack__item m-stack__item--middle m-brand__logo">
-                        <a href="index.html" class="m-brand__logo-wrapper">
-                        </a>
                     </div>
                     <div class="m-stack__item m-stack__item--middle m-brand__tools">
                         <!-- BEGIN: Left Aside Minimize Toggle -->
@@ -38,6 +36,17 @@
             </div>
             <!-- END: Brand -->
             <div class="m-stack__item m-stack__item--fluid m-header-head" id="m_header_nav">
+            <div class=" m--align-right" style="margin-top:15px; margin-right: 10px;">
+                    <a href="{{ url('/logout') }}" href="#" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+                        <span>
+                           
+                            <span>
+                               Logout
+                            </span>
+                        </span>
+                    </a>
+                    <div class="m-separator m-separator--dashed d-xl-none"></div>
+                </div>
                 <!-- BEGIN: Horizontal Menu -->
                 {{-- <button class="m-aside-header-menu-mobile-close  m-aside-header-menu-mobile-close--skin-dark "
                     id="m_aside_header_menu_mobile_close_btn">

@@ -66,7 +66,7 @@ var DatatableDataLocalDemo = function () {
 			}, {
 				field: "Actions",
 				width: 110,
-				title: "Actions",
+				title: "Ações",
 				sortable: false,
 				overflow: 'visible',
 				template: function (row, index, datatable) {

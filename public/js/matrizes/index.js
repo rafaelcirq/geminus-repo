@@ -61,6 +61,9 @@ var DatatableDataLocalDemo = function () {
                             info: 'Mostrando {{start}} - {{end}} de {{total}} registros',
                         }
                     }
+                },
+                records:{
+                    noRecords: 'Sem matrizes cadastradas.'
                 }
             },
 

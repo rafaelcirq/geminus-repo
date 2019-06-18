@@ -98,13 +98,16 @@ var DatatableDataLocalDemo = function () {
         		selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 			}, {
 				field: "nome",
-				title: "Nome"
+				title: "Nome",
+				width: 230,
 			}, {
 				field: "cursoMatriz",
-				title: "Matriz"
+				title: "Matriz",
+				width: 250,
 			},{
 				field: "periodo",
-				title: "Período"
+				title: "Período",
+				width: 70,
 			}, {
                 field: "Actions",
 				title: "Disciplinas Equivalentes",

@@ -18,6 +18,19 @@
                 </h3>
             </div>
         </div>
+        <div class=" m--align-right" style="padding-top:15px;">
+        @if(!Auth::check())
+                    <a href="{{ url('/login') }}" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+                        <span>
+                           
+                            <span>
+                                Login
+                            </span>
+                        </span>
+                    </a>
+                    @endif
+                    <div class="m-separator m-separator--dashed d-xl-none"></div>
+                </div>
     </div>
     <div class="m-portlet__body">
 
@@ -53,7 +66,7 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="m-input-icon m-input-icon--left">
-                                    <input type="text" class="form-control m-input m-input--solid" placeholder="Buscar..." id="generalSearch">
+                                    <input type="text" class="form-control m-input m-input--solid" placeholder="Buscar Disciplina..." id="generalSearch">
                                     <span class="m-input-icon__icon m-input-icon__icon--left">
                                         <span>
                                             <i class="la la-search"></i>

@@ -17,7 +17,7 @@ class MainController extends Controller
     }
     
     public function sucesso() {
-        return redirect('listarusuario');
+        return redirect('/equivalencias');
     }
 
     function checkLogin (Request $request ){
@@ -44,7 +44,7 @@ class MainController extends Controller
             
 
             if(Auth::attempt($userData)){
-                return redirect('geminus');
+                return redirect('/');
              
             }
             else{
@@ -55,12 +55,12 @@ class MainController extends Controller
     }
 
     function sucessLogin(){
-        return redirect('geminus');
+        return redirect('/');
     }
     function logout()
     {
         Auth::logout();
-        return redirect('login');
+        return redirect('/');
     }
 
     public function atualizasenha($password,$email)

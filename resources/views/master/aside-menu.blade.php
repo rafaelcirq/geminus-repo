@@ -20,7 +20,7 @@
             <i class="m-menu__section-icon flaticon-more-v3"></i>
         </li>
         <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-            <a href="/matrizes" class="m-menu__link m-menu__toggle">
+            <a href="/matrizes" class="m-menu__link">
                 <i class="m-menu__link-icon flaticon-folder-3"></i>
                 <span class="m-menu__link-text">
                     Matrizes
@@ -28,7 +28,7 @@
             </a>
         </li>
         <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-            <a href="/disciplinas" class="m-menu__link m-menu__toggle">
+            <a href="/disciplinas" class="m-menu__link">
                 <i class="m-menu__link-icon flaticon-edit-1"></i>
                 <span class="m-menu__link-text">
                     Disciplinas
@@ -36,7 +36,7 @@
             </a>
         </li>
         <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-            <a href="/professores" class="m-menu__link m-menu__toggle">
+            <a href="/professores" class="m-menu__link">
                 <i class="m-menu__link-icon flaticon-users"></i>
                 <span class="m-menu__link-text">
                     Professores
@@ -44,7 +44,7 @@
             </a>
         </li>
         <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-            <a href="/turmas" class="m-menu__link m-menu__toggle">
+            <a href="/turmas" class="m-menu__link">
                 <i class="m-menu__link-icon flaticon-list-2"></i>
                 <span class="m-menu__link-text">
                     Turmas
@@ -52,7 +52,7 @@
             </a>
         </li>
         <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-            <a href="/cursos" class="m-menu__link m-menu__toggle">
+            <a href="/cursos" class="m-menu__link">
                 <i class="m-menu__link-icon flaticon-file"></i>
                 <span class="m-menu__link-text">
                     Cursos

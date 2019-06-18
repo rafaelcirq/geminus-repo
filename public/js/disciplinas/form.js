@@ -133,6 +133,10 @@ var Form = function ()
                     if (!$("input[name='_method']").val()) {
                         form.clearForm(); // clear form
                         $('#role').val(null).trigger('change');
+                        $('#pre_requisitos').val('');
+                        $('#pre_requisitos').select2();
+                        $('#equivalencias').val('');
+                        $('#equivalencias').select2();
                         form.validate().resetForm(); // reset validation states
                     }
                 } else {

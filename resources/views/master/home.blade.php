@@ -47,9 +47,11 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- end::Head -->
 <!-- end::Body -->
 
-<body class="m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
+<body class="m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile
+ m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push">
     <!-- begin:: Page -->
     <div class="m-grid m-grid--hor m-grid--root m-page">
+    @if(Auth::check())
         <!-- BEGIN: Header -->
     @include('master.header')
         <!-- END: Header -->
@@ -61,7 +63,9 @@ License: You must have a valid license purchased only from themeforest(the above
             </button>
             <div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-dark ">
                 <!-- BEGIN: Aside Menu -->
-    @include('master.aside-menu')
+               
+                    @include('master.aside-menu')
+                @endif
                 <!-- END: Aside Menu -->
             </div>
             <!-- END: Left Aside -->

@@ -1,14 +1,14 @@
 <input value="{{ isset($disciplina) ? $disciplina->id : null }}" id="id_disciplina" hidden>
 
 <div class="form-group m-form__group row">
-    <div class="col-lg-9">
+    <div class="col-lg-9 m-form__group-sub">
         <label>
             * Nome:
         </label>
         <input type="" class="form-control" value="{{ isset($disciplina) ? $disciplina->nome : null }}"
             name="nome" placeholder="">
     </div>
-    <div class="col-lg-3">
+    <div class="col-lg-3 m-form__group-sub">
         <label>
             * Carga horária:
         </label>
